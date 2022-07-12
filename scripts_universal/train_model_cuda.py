@@ -210,6 +210,7 @@ def main():
         train_end_time = time()
         train_time = timedelta(seconds=train_end_time - train_start_time)
         train_loss /= len(trainloader.sampler)
+        logging.info(f'Done. Loss: {train_loss}, time: {train_time}')
 
         tensorboard_writer.add_scalar('Loss/train', train_loss, epoch)
         tensorboard_writer.add_scalar('Accuracy/train', accuracy.compute().item(), epoch)
@@ -264,7 +265,7 @@ def main():
         epoch += 1
 
         logging.info(
-            f'Epoch done. Time: {val_time}, accuracy: {current_accuracy}%, '
+            f'Done. Time: {val_time}, accuracy: {current_accuracy}%, '
             f'macro average precision: {precision.compute().item()}, '
             f'macro average recall: {recall.compute().item()}'
         )

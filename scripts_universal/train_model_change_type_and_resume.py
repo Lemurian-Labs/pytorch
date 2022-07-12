@@ -23,24 +23,10 @@ except ModuleNotFoundError:
     print(torchvision_torchmetrics_disclaimer)
     sys.exit(0)
 
+from common.dtype_name_to_dtype import dtype_name_to_dtype
 from common.models import model_name_to_model, model_transforms
+from common.optimizer_to import optimizer_to
 
-def optimizer_to(optimizer, target):
-    for param in optimizer.state.values():
-        if isinstance(param, torch.Tensor):
-            param.data = param.data.to(target)
-            if param._grad is not None:
-                param._grad.data = param._grad.data.to(target)
-        elif isinstance(param, dict):
-            for subparam in param.values():
-                if isinstance(subparam, torch.Tensor):
-                    subparam.data = subparam.data.to(target)
-                    if subparam._grad is not None:
-                        subparam._grad.data = subparam._grad.data.to(target)
-
-dtype_name_to_dtype = {
-    'cfloatwithsubnormals': torch.cfloatwithsubnormals
-}
 
 def main():
     os.makedirs('data/train_model_change_type_and_resume', exist_ok=True)
