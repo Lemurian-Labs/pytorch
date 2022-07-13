@@ -30,6 +30,9 @@ inline void store_scalar(void* data, at::ScalarType scalarType, PyObject* obj) {
     case at::kCFloatWithSubnormals:
       *(at::CFloatWithSubnormals*)data = at::convert<at::CFloatWithSubnormals, double>(THPUtils_unpackDouble(obj));
       break;
+    case at::kLNS16:
+      *(at::LNS16*)data = at::convert<at::LNS16, double>(THPUtils_unpackDouble(obj));
+      break;
     default: throw std::runtime_error("invalid type");
   }
 }
@@ -56,6 +59,7 @@ inline PyObject* load_scalar(void* data, at::ScalarType scalarType) {
     case at::kBool: return PyBool_FromLong(*(bool*)data);
     case at::kBFloat16: return PyFloat_FromDouble(at::convert<double, at::BFloat16>(*(at::BFloat16*)data));
     case at::kCFloatWithSubnormals: return PyFloat_FromDouble(at::convert<double, at::CFloatWithSubnormals>(*(at::CFloatWithSubnormals*)data));
+    case at::kLNS16: return PyFloat_FromDouble(at::convert<double, at::LNS16>(*(at::LNS16*)data));
     default: throw std::runtime_error("invalid type");
   }
 }

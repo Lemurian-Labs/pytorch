@@ -130,8 +130,14 @@ at::Tensor& random_from_to_impl(at::Tensor& self, int64_t from, c10::optional<in
     int64_t to_inc = 0;
     if (isFloatingType(iter.dtype())) {
       AT_DISPATCH_FLOATING_TYPES_AND_UNIVERSAL_AND2(at::ScalarType::Half, at::ScalarType::BFloat16, self.scalar_type(), "random_from_to_range_calc", [&] {
-        constexpr int64_t scalar_t_max = static_cast<int64_t>(1) << std::numeric_limits<scalar_t>::digits;
-        to_inc = scalar_t_max > std::numeric_limits<int64_t>::max() ? std::numeric_limits<int64_t>::max() : static_cast<int64_t>(scalar_t_max);
+        // Compare to std::numeric_limits<int64_t>::digits to make it compile
+        // for types with large range (like LNS16)
+        if constexpr (std::numeric_limits<scalar_t>::digits > std::numeric_limits<int64_t>::digits) {
+          to_inc = std::numeric_limits<int64_t>::max();
+        } else {
+          constexpr int64_t scalar_t_max = static_cast<int64_t>(1) << std::numeric_limits<scalar_t>::digits;
+          to_inc = scalar_t_max > std::numeric_limits<int64_t>::max() ? std::numeric_limits<int64_t>::max() : static_cast<int64_t>(scalar_t_max);
+        }
         from = update_from<scalar_t>(from);
         TORCH_CHECK(from < to_inc, "random_ expects 'from' casted to dtype to be less than or equal to 'to_inc' casted to dtype, but got from=", from, " > to_inc=", to_inc);
       });

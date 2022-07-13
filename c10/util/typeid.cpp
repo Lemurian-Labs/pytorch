@@ -91,5 +91,6 @@ CAFFE_KNOWN_TYPE(float*)
 CAFFE_KNOWN_TYPE(at::Half*)
 
 CAFFE_KNOWN_TYPE(c10::CFloatWithSubnormals*)
+CAFFE_KNOWN_TYPE(c10::LNS16*)
 
 } // namespace caffe2

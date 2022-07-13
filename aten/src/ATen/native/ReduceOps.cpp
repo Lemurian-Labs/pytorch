@@ -619,10 +619,10 @@ inline bool isnan_(T x) {
   return std::isnan(x);
 }
 #endif
-#define OP(T, NAME)                  \
-  template<>                         \
-  inline bool isnan_(T x) {          \
-    return sw::universal::isnan(x);  \
+#define OP(T, NAME)         \
+  template<>                \
+  inline bool isnan_(T x) { \
+    return x.isnan();       \
   }
 AT_FORALL_UNIVERSAL_TYPES(OP)
 #undef OP

@@ -33,6 +33,10 @@ template <>
 C10_HOST_DEVICE inline constexpr CFloatWithSubnormals pi<CFloatWithSubnormals>() {
   return CFloatWithSubnormals(0x40490FDB, CFloatWithSubnormals::from_bits());
 }
+template <>
+C10_HOST_DEVICE inline constexpr LNS16 pi<LNS16>() {
+  return LNS16(0x01A7, LNS16::from_bits());
+}
 } // namespace detail
 
 // TODO: Replace me with std::numbers::pi when C++20 is there

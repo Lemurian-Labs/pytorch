@@ -372,6 +372,8 @@ inline void deprecated_AT_DISPATCH_ALL_TYPES_AND_HALF_AND_COMPLEX() {}
       AT_PRIVATE_CASE_TYPE(NAME, at::ScalarType::Float, float, __VA_ARGS__)              \
       AT_PRIVATE_CASE_TYPE(                                                                  \
           NAME, at::ScalarType::CFloatWithSubnormals, at::CFloatWithSubnormals, __VA_ARGS__) \
+      AT_PRIVATE_CASE_TYPE(                                    \
+          NAME, at::ScalarType::LNS16, at::LNS16, __VA_ARGS__) \
       default:                                                              \
         AT_ERROR(#NAME, " not implemented for '", toString(_st), "'");      \
     }                                                                       \
@@ -389,6 +391,8 @@ inline void deprecated_AT_DISPATCH_ALL_TYPES_AND_HALF_AND_COMPLEX() {}
       AT_PRIVATE_CASE_TYPE(NAME, at::ScalarType::Float, float, __VA_ARGS__)              \
       AT_PRIVATE_CASE_TYPE(                                                                  \
           NAME, at::ScalarType::CFloatWithSubnormals, at::CFloatWithSubnormals, __VA_ARGS__) \
+      AT_PRIVATE_CASE_TYPE(                                    \
+          NAME, at::ScalarType::LNS16, at::LNS16, __VA_ARGS__) \
       AT_PRIVATE_CASE_TYPE(NAME,                                               \
           SCALARTYPE,                                                       \
           decltype(c10::impl::ScalarTypeToCPPType<SCALARTYPE>::t),          \
@@ -410,6 +414,8 @@ inline void deprecated_AT_DISPATCH_ALL_TYPES_AND_HALF_AND_COMPLEX() {}
       AT_PRIVATE_CASE_TYPE(NAME, at::ScalarType::Float, float, __VA_ARGS__)              \
       AT_PRIVATE_CASE_TYPE(                                                                  \
           NAME, at::ScalarType::CFloatWithSubnormals, at::CFloatWithSubnormals, __VA_ARGS__) \
+      AT_PRIVATE_CASE_TYPE(                                    \
+          NAME, at::ScalarType::LNS16, at::LNS16, __VA_ARGS__) \
       AT_PRIVATE_CASE_TYPE(                                                 \
           NAME,                                                             \
           SCALARTYPE1,                                                      \
@@ -437,6 +443,8 @@ inline void deprecated_AT_DISPATCH_ALL_TYPES_AND_HALF_AND_COMPLEX() {}
       AT_PRIVATE_CASE_TYPE(NAME, at::ScalarType::Float, float, __VA_ARGS__)              \
       AT_PRIVATE_CASE_TYPE(                                                                  \
           NAME, at::ScalarType::CFloatWithSubnormals, at::CFloatWithSubnormals, __VA_ARGS__) \
+      AT_PRIVATE_CASE_TYPE(                                    \
+          NAME, at::ScalarType::LNS16, at::LNS16, __VA_ARGS__) \
       AT_PRIVATE_CASE_TYPE(                                                 \
           NAME,                                                             \
           SCALARTYPE1,                                                      \
@@ -603,6 +611,8 @@ inline void deprecated_AT_DISPATCH_ALL_TYPES_AND_HALF_AND_COMPLEX() {}
           __VA_ARGS__)                                                      \
       AT_PRIVATE_CASE_TYPE(                                                                  \
           NAME, at::ScalarType::CFloatWithSubnormals, at::CFloatWithSubnormals, __VA_ARGS__) \
+      AT_PRIVATE_CASE_TYPE(                                    \
+          NAME, at::ScalarType::LNS16, at::LNS16, __VA_ARGS__) \
       default:                                                              \
         AT_ERROR(#NAME, " not implemented for '", toString(_st), "'");      \
     }                                                                       \
@@ -626,6 +636,8 @@ inline void deprecated_AT_DISPATCH_ALL_TYPES_AND_HALF_AND_COMPLEX() {}
           at::ScalarType::ComplexFloat, c10::complex<float>, __VA_ARGS__)   \
       AT_PRIVATE_CASE_TYPE(                                                                  \
           NAME, at::ScalarType::CFloatWithSubnormals, at::CFloatWithSubnormals, __VA_ARGS__) \
+      AT_PRIVATE_CASE_TYPE(                                    \
+          NAME, at::ScalarType::LNS16, at::LNS16, __VA_ARGS__) \
       AT_PRIVATE_CASE_TYPE(                                                 \
           NAME,                                                             \
           SCALARTYPE,                                                       \
@@ -658,6 +670,8 @@ inline void deprecated_AT_DISPATCH_ALL_TYPES_AND_HALF_AND_COMPLEX() {}
           __VA_ARGS__)                                                          \
       AT_PRIVATE_CASE_TYPE(                                                                  \
           NAME, at::ScalarType::CFloatWithSubnormals, at::CFloatWithSubnormals, __VA_ARGS__) \
+      AT_PRIVATE_CASE_TYPE(                                    \
+          NAME, at::ScalarType::LNS16, at::LNS16, __VA_ARGS__) \
       AT_PRIVATE_CASE_TYPE(                                                 \
           NAME,                                                             \
           SCALARTYPE1,                                                      \
@@ -695,6 +709,8 @@ inline void deprecated_AT_DISPATCH_ALL_TYPES_AND_HALF_AND_COMPLEX() {}
           __VA_ARGS__)                                                          \
       AT_PRIVATE_CASE_TYPE(                                                                  \
           NAME, at::ScalarType::CFloatWithSubnormals, at::CFloatWithSubnormals, __VA_ARGS__) \
+      AT_PRIVATE_CASE_TYPE(                                    \
+          NAME, at::ScalarType::LNS16, at::LNS16, __VA_ARGS__) \
       AT_PRIVATE_CASE_TYPE(                                                 \
           NAME,                                                             \
           SCALARTYPE1,                                                      \
@@ -788,6 +804,8 @@ inline void deprecated_AT_DISPATCH_ALL_TYPES_AND_HALF_AND_COMPLEX() {}
       AT_PRIVATE_CASE_TYPE(NAME, at::ScalarType::Short, int16_t, __VA_ARGS__)            \
       AT_PRIVATE_CASE_TYPE(                                                                  \
           NAME, at::ScalarType::CFloatWithSubnormals, at::CFloatWithSubnormals, __VA_ARGS__) \
+      AT_PRIVATE_CASE_TYPE(                                    \
+          NAME, at::ScalarType::LNS16, at::LNS16, __VA_ARGS__) \
       default:                                                                  \
         AT_ERROR(#NAME, " not implemented for '", toString(_st), "'");          \
     }                                                                           \
@@ -898,6 +916,8 @@ inline void deprecated_AT_DISPATCH_ALL_TYPES_AND_HALF_AND_COMPLEX() {}
           at::ScalarType::ComplexDouble, c10::complex<double>, __VA_ARGS__) \
       AT_PRIVATE_CASE_TYPE(                                                                  \
           NAME, at::ScalarType::CFloatWithSubnormals, at::CFloatWithSubnormals, __VA_ARGS__) \
+      AT_PRIVATE_CASE_TYPE(                                    \
+          NAME, at::ScalarType::LNS16, at::LNS16, __VA_ARGS__) \
       default:                                                              \
         AT_ERROR(#NAME, " not implemented for '", toString(_st), "'");      \
     }                                                                       \
@@ -943,6 +963,8 @@ inline void deprecated_AT_DISPATCH_ALL_TYPES_AND_HALF_AND_COMPLEX() {}
       AT_PRIVATE_CASE_TYPE(NAME, at::ScalarType::Short, int16_t, __VA_ARGS__)            \
       AT_PRIVATE_CASE_TYPE(                                                                  \
           NAME, at::ScalarType::CFloatWithSubnormals, at::CFloatWithSubnormals, __VA_ARGS__) \
+      AT_PRIVATE_CASE_TYPE(                                    \
+          NAME, at::ScalarType::LNS16, at::LNS16, __VA_ARGS__) \
       AT_PRIVATE_CASE_TYPE(                                             \
           NAME,                                                         \
           SCALARTYPE,                                                   \
@@ -1013,6 +1035,8 @@ inline void deprecated_AT_DISPATCH_ALL_TYPES_AND_HALF_AND_COMPLEX() {}
           __VA_ARGS__)                                                      \
       AT_PRIVATE_CASE_TYPE(                                                                  \
           NAME, at::ScalarType::CFloatWithSubnormals, at::CFloatWithSubnormals, __VA_ARGS__) \
+      AT_PRIVATE_CASE_TYPE(                                    \
+          NAME, at::ScalarType::LNS16, at::LNS16, __VA_ARGS__) \
       AT_PRIVATE_CASE_TYPE(                                                 \
           NAME,                                                             \
           SCALARTYPE,                                                       \
@@ -1068,6 +1092,8 @@ inline void deprecated_AT_DISPATCH_ALL_TYPES_AND_HALF_AND_COMPLEX() {}
       AT_PRIVATE_CASE_TYPE(NAME, at::ScalarType::Short, int16_t, __VA_ARGS__)            \
       AT_PRIVATE_CASE_TYPE(                                                                  \
           NAME, at::ScalarType::CFloatWithSubnormals, at::CFloatWithSubnormals, __VA_ARGS__) \
+      AT_PRIVATE_CASE_TYPE(                                    \
+          NAME, at::ScalarType::LNS16, at::LNS16, __VA_ARGS__) \
       AT_PRIVATE_CASE_TYPE(                                                   \
           NAME,                                                               \
           SCALARTYPE1,                                                        \
@@ -1138,6 +1164,8 @@ inline void deprecated_AT_DISPATCH_ALL_TYPES_AND_HALF_AND_COMPLEX() {}
           NAME, at::ScalarType::ComplexDouble, c10::complex<double>, __VA_ARGS__)        \
       AT_PRIVATE_CASE_TYPE(                                                                  \
           NAME, at::ScalarType::CFloatWithSubnormals, at::CFloatWithSubnormals, __VA_ARGS__) \
+      AT_PRIVATE_CASE_TYPE(                                    \
+          NAME, at::ScalarType::LNS16, at::LNS16, __VA_ARGS__) \
       AT_PRIVATE_CASE_TYPE(                                                 \
           NAME,                                                             \
           SCALARTYPE1,                                                      \
@@ -1205,6 +1233,8 @@ inline void deprecated_AT_DISPATCH_ALL_TYPES_AND_HALF_AND_COMPLEX() {}
       AT_PRIVATE_CASE_TYPE(NAME, at::ScalarType::Short, int16_t, __VA_ARGS__)            \
       AT_PRIVATE_CASE_TYPE(                                                                   \
           NAME, at::ScalarType::CFloatWithSubnormals, at::CFloatWithSubnormals, __VA_ARGS__) \
+      AT_PRIVATE_CASE_TYPE(                                    \
+          NAME, at::ScalarType::LNS16, at::LNS16, __VA_ARGS__) \
       AT_PRIVATE_CASE_TYPE(                                             \
           NAME,                                                         \
           SCALARTYPE1,                                                  \
@@ -1285,6 +1315,8 @@ inline void deprecated_AT_DISPATCH_ALL_TYPES_AND_HALF_AND_COMPLEX() {}
           NAME, at::ScalarType::ComplexDouble, c10::complex<double>, __VA_ARGS__)        \
       AT_PRIVATE_CASE_TYPE(                                                                  \
           NAME, at::ScalarType::CFloatWithSubnormals, at::CFloatWithSubnormals, __VA_ARGS__) \
+      AT_PRIVATE_CASE_TYPE(                                    \
+          NAME, at::ScalarType::LNS16, at::LNS16, __VA_ARGS__) \
       AT_PRIVATE_CASE_TYPE(                                                 \
           NAME,                                                             \
           SCALARTYPE1,                                                      \
@@ -1328,6 +1360,8 @@ inline void deprecated_AT_DISPATCH_ALL_TYPES_AND_HALF_AND_COMPLEX() {}
     switch (_st) {                                                          \
       AT_PRIVATE_CASE_TYPE(                                                                  \
           NAME, at::ScalarType::CFloatWithSubnormals, at::CFloatWithSubnormals, __VA_ARGS__) \
+      AT_PRIVATE_CASE_TYPE(                                    \
+          NAME, at::ScalarType::LNS16, at::LNS16, __VA_ARGS__) \
       default:                                                          \
         AT_ERROR(#NAME, " not implemented for '", toString(_st), "'");  \
     }                                                                   \

@@ -63,6 +63,9 @@ DLDataType getDLDataType(const Tensor& t) {
     case ScalarType::CFloatWithSubnormals:
       TORCH_CHECK(false, "CFloatWithSubnormals type is not supported by dlpack");
       break;
+    case ScalarType::LNS16:
+      TORCH_CHECK(false, "LNS16 type is not supported by dlpack");
+      break;
     case ScalarType::Undefined:
       TORCH_CHECK(false, "Undefined is not a valid ScalarType");
     case ScalarType::NumOptions:

@@ -55,6 +55,8 @@ std::pair<std::string, std::string> getDtypeNames(
       return std::make_pair("quint2x4", "");
     case at::ScalarType::CFloatWithSubnormals:
       return std::make_pair("cfloatwithsubnormals", "");
+    case at::ScalarType::LNS16:
+      return std::make_pair("lns16", "");
     default:
       throw std::runtime_error("Unimplemented scalar type");
   }

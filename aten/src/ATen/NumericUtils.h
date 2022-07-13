@@ -63,10 +63,10 @@ inline C10_HOST_DEVICE bool _isnan(at::BFloat16 val) {
   template <typename T1,                                                       \
            typename std::enable_if<std::is_same<T, T1>::value, int>::type = 0> \
   inline C10_HOST_DEVICE bool _isnan(T1 val) {                                 \
-    return sw::universal::isnan(val);                                          \
+    return val.isnan();                                                        \
   }                                                                            \
   inline C10_HOST_DEVICE bool _isnan(T val) {                                  \
-    return sw::universal::isnan(val);                                          \
+    return val.isnan();                                                        \
   }
 AT_FORALL_UNIVERSAL_TYPES(OP)
 #undef OP
@@ -103,7 +103,7 @@ inline C10_HOST_DEVICE bool _isinf(at::BFloat16 val) {
 
 #define OP(T, NAME)                            \
   inline C10_HOST_DEVICE bool _isinf(T val) {  \
-    return sw::universal::isinf(val);          \
+    return val.isinf();                        \
   }
 AT_FORALL_UNIVERSAL_TYPES(OP)
 #undef OP

@@ -1,3 +1,29 @@
 #pragma once
 
 #include <c10/util/UniversalTypes/CFloatWithSubnormals/type.h>
+#include <c10/util/UniversalTypes/LNS16/type.h>
+
+namespace c10 {
+
+// Checks whether T is one of the new floating point types
+template <typename T>
+struct is_universal_floating_point :
+  std::integral_constant<bool,
+    std::is_same<T, CFloatWithSubnormals>::value ||
+    std::is_same<T, LNS16>::value> {
+};
+
+// Checks whether T is one of the new double precision floating point types
+template <typename T>
+struct is_universal_double_precision :
+  std::integral_constant<bool, false> {
+};
+
+// In case we want to add complex or integral types later
+template <typename T>
+struct is_universal_type :
+  std::integral_constant<bool,
+    is_universal_floating_point<T>::value> {
+};
+
+}

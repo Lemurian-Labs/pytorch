@@ -156,7 +156,7 @@ class alignas(4) CFloatWithSubnormals : public sw::universal::cfloat<32, 8, uint
 public:
   using Base = sw::universal::cfloat<32, 8, uint32_t, true, false, false>;
 
-  constexpr C10_HOST_DEVICE CFloatWithSubnormals() : Base() {}
+  CFloatWithSubnormals() = default;
   C10_HOST_DEVICE CFloatWithSubnormals(float value) : Base()
   {
     convert_ieee754<float>(value);
@@ -477,26 +477,6 @@ inline C10_HOST_DEVICE CFloatWithSubnormals operator/(int64_t left, const CFloat
 #undef FORALL_SUPPORTED_TYPES
 #undef FORALL_SUPPORTED_TYPES_IN_OPERATORS
 #undef FORALL_ADDITIONAL_TYPES
-
-// Checks whether T is one of the new floating point types
-template <typename T>
-struct is_universal_floating_point :
-  std::integral_constant<bool,
-    std::is_same<T, CFloatWithSubnormals>::value> {
-};
-
-// Checks whether T is one of the new double precision floating point types
-template <typename T>
-struct is_universal_double_precision :
-  std::integral_constant<bool, false> {
-};
-
-// In case we want to add complex or integral types later
-template <typename T>
-struct is_universal_type :
-  std::integral_constant<bool,
-    is_universal_floating_point<T>::value> {
-};
 
 }
 

@@ -39,7 +39,7 @@ __all__ = [
     'no_grad', 'enable_grad', 'rand', 'randn', 'inference_mode',
     'DoubleStorage', 'FloatStorage', 'LongStorage', 'IntStorage',
     'ShortStorage', 'CharStorage', 'ByteStorage', 'BoolStorage',
-    'CFloatWithSubnormalsStorage',
+    'CFloatWithSubnormalsStorage', 'LNS16Storage',
     'DoubleTensor', 'FloatTensor', 'LongTensor', 'IntTensor',
     'ShortTensor', 'CharTensor', 'ByteTensor', 'BoolTensor', 'Tensor',
     'lobpcg', 'use_deterministic_algorithms',
@@ -692,13 +692,18 @@ class CFloatWithSubnormalsStorage(_TypedStorage):
     @classproperty
     def dtype(self):
         return torch.cfloatwithsubnormals
+    
+class LNS16Storage(_TypedStorage):
+    @classproperty
+    def dtype(self):
+        return torch.lns16
 
 _storage_classes = {
     _UntypedStorage, DoubleStorage, FloatStorage, LongStorage, IntStorage,
     ShortStorage, CharStorage, ByteStorage, HalfStorage, BoolStorage,
     QUInt8Storage, QInt8Storage, QInt32Storage, BFloat16Storage,
     ComplexFloatStorage, ComplexDoubleStorage, QUInt4x2Storage, QUInt2x4Storage,
-    CFloatWithSubnormalsStorage
+    CFloatWithSubnormalsStorage, LNS16Storage
 }
 
 # The _tensor_classes set is initialized by the call to _C._initialize_tensor_type_bindings()
