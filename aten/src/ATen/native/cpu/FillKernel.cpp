@@ -37,10 +37,6 @@ void fill_non_native_type<c10::complex<at::Half>>(TensorIterator& iter, const Sc
 #define SPECIALIZE_FOR_UNIVERSAL(T, NAME)                                           \
   template <>                                                                       \
   void fill_non_native_type<T>(TensorIterator& iter, const Scalar& value_scalar) {  \
-    static_assert(                                                                  \
-      sizeof(T) == sizeof(int32_t),                                                 \
-      "Size of " #NAME "should be 32-bits"                                          \
-    );                                                                              \
     auto value = value_scalar.to<T>().block(0);                                     \
     /* Signed type has more acceleration */                                         \
     using H = typename std::make_signed<decltype(value)>::type;                     \

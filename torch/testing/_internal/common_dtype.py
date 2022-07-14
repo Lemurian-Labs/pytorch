@@ -30,14 +30,16 @@ from torch.testing._legacy import (
 import torch
 
 native_equivalent = {
-    torch.cfloatwithsubnormals: torch.float32
+    torch.cfloatwithsubnormals: torch.float32,
+    torch.lns16: torch.float32
 }
 
 universal_fp_limit = {
-    torch.cfloatwithsubnormals: 2**24
+    torch.cfloatwithsubnormals: 2**24,
+    torch.lns16: 2**63,
 }
 
-_universal_types = _dispatch_dtypes((torch.cfloatwithsubnormals,))
+_universal_types = _dispatch_dtypes((torch.cfloatwithsubnormals, torch.lns16))
 def universal_types():
     """Returns all Universal types"""
     return _universal_types

@@ -86,9 +86,16 @@ uniform_int(V val) {
 
 template <typename T, typename V>
 C10_HOST_DEVICE inline dist_acctype<T> uniform_real(V val, T from, T to) {
-  constexpr auto MASK = static_cast<V>((static_cast<uint64_t>(1) << std::numeric_limits<T>::digits) - 1);
-  constexpr auto DIVISOR = static_cast<dist_acctype<T>>(1) / (static_cast<uint64_t>(1) << std::numeric_limits<T>::digits);
-  dist_acctype<T> x = (val & MASK) * DIVISOR;
+  dist_acctype<T> x;
+  if constexpr (std::numeric_limits<T>::digits > std::numeric_limits<uint64_t>::digits) {
+    constexpr auto MASK = static_cast<V>(0xFFFFFFFFFFFFFFFF);
+    constexpr auto DIVISOR = static_cast<dist_acctype<T>>(1) / 0xFFFFFFFFFFFFFFFF;
+    x = (val & MASK) * DIVISOR;
+  } else {
+    constexpr auto MASK = static_cast<V>((static_cast<uint64_t>(1) << std::numeric_limits<T>::digits) - 1);
+    constexpr auto DIVISOR = static_cast<dist_acctype<T>>(1) / (static_cast<uint64_t>(1) << std::numeric_limits<T>::digits);
+    x = (val & MASK) * DIVISOR;
+  }
   return (x * (to - from) + from);
 }
 

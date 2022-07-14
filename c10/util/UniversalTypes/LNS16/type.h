@@ -435,7 +435,8 @@ public:
     return c10::LNS16(numeric_limits<c10::LNS16::Base>::max());
   }
   static constexpr c10::LNS16 lowest() { // return most negative value
-    return c10::LNS16(numeric_limits<c10::LNS16::Base>::lowest());
+    return c10::LNS16(); // FIXME
+    // return c10::LNS16(numeric_limits<c10::LNS16::Base>::lowest());
   }
   static CONSTEXPRESSION c10::LNS16 epsilon() { // return smallest effective increment from 1.0
     return c10::LNS16(numeric_limits<c10::LNS16::Base>::epsilon());
