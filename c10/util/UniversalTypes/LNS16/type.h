@@ -1,9 +1,6 @@
 #pragma once
 
-#pragma push_macro("setbit")
-#undef setbit
-#include <universal/number/lns/lns.hpp>
-#pragma pop_macro("setbit")
+#include <c10/util/UniversalTypes/LNS16/misc.h>
 
 #include <c10/util/BFloat16.h>
 #include <c10/util/Half.h>

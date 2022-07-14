@@ -5,6 +5,10 @@
 #include <universal/number/cfloat/cfloat.hpp>
 #pragma pop_macro("setbit")
 
+#include <c10/util/UniversalTypes/CFloatWithSubnormals/add.h>
+#include <c10/util/UniversalTypes/CFloatWithSubnormals/div.h>
+#include <c10/util/UniversalTypes/CFloatWithSubnormals/mul.h>
+#include <c10/util/UniversalTypes/CFloatWithSubnormals/misc.h>
 #include <c10/util/BFloat16.h>
 #include <c10/util/Half.h>
 
@@ -30,123 +34,6 @@
   _(unsigned char)                 \
   _(uint64_t)
 
-// Redeclare operators as __host__ __device__
-namespace sw {
-namespace universal {
-
-// Suppress the warnings that __host__ functions were redeclared as __host__ __device__
-#pragma diag_suppress 20040
-
-// Comparison
-template<size_t nnbits, size_t nes, typename nbt, bool nsub, bool nsup, bool nsat>
-inline C10_HOST_DEVICE bool operator<(const cfloat<nnbits, nes, nbt, nsub, nsup, nsat>& lhs, const cfloat<nnbits, nes, nbt, nsub, nsup, nsat>& rhs);
-
-template<size_t nnbits, size_t nes, typename nbt, bool nsub, bool nsup, bool nsat>
-inline C10_HOST_DEVICE bool operator<=(const cfloat<nnbits, nes, nbt, nsub, nsup, nsat>& lhs, const cfloat<nnbits, nes, nbt, nsub, nsup, nsat>& rhs);
-
-template<size_t nnbits, size_t nes, typename nbt, bool nsub, bool nsup, bool nsat>
-inline C10_HOST_DEVICE bool operator>(const cfloat<nnbits, nes, nbt, nsub, nsup, nsat>& lhs, const cfloat<nnbits, nes, nbt, nsub, nsup, nsat>& rhs);
-
-template<size_t nnbits, size_t nes, typename nbt, bool nsub, bool nsup, bool nsat>
-inline C10_HOST_DEVICE bool operator>=(const cfloat<nnbits, nes, nbt, nsub, nsup, nsat>& lhs, const cfloat<nnbits, nes, nbt, nsub, nsup, nsat>& rhs);
-
-// Arithmetic
-template<size_t nbits, size_t es, typename bt, bool hasSubnormals, bool hasSupernormals, bool isSaturating>
-inline C10_HOST_DEVICE cfloat<nbits, es, bt, hasSubnormals, hasSupernormals, isSaturating> operator+(
-  const cfloat<nbits, es, bt, hasSubnormals, hasSupernormals, isSaturating>& lhs,
-  const cfloat<nbits, es, bt, hasSubnormals, hasSupernormals, isSaturating>& rhs);
-
-template<size_t nbits, size_t es, typename bt, bool hasSubnormals, bool hasSupernormals, bool isSaturating>
-inline C10_HOST_DEVICE cfloat<nbits, es, bt, hasSubnormals, hasSupernormals, isSaturating> operator-(
-  const cfloat<nbits, es, bt, hasSubnormals, hasSupernormals, isSaturating>& lhs,
-  const cfloat<nbits, es, bt, hasSubnormals, hasSupernormals, isSaturating>& rhs);
-
-template<size_t nbits, size_t es, typename bt, bool hasSubnormals, bool hasSupernormals, bool isSaturating>
-inline C10_HOST_DEVICE cfloat<nbits, es, bt, hasSubnormals, hasSupernormals, isSaturating> operator*(
-  const cfloat<nbits, es, bt, hasSubnormals, hasSupernormals, isSaturating>& lhs,
-  const cfloat<nbits, es, bt, hasSubnormals, hasSupernormals, isSaturating>& rhs);
-
-template<size_t nbits, size_t es, typename bt, bool hasSubnormals, bool hasSupernormals, bool isSaturating>
-inline C10_HOST_DEVICE cfloat<nbits, es, bt, hasSubnormals, hasSupernormals, isSaturating> operator/(
-  const cfloat<nbits, es, bt, hasSubnormals, hasSupernormals, isSaturating>& lhs,
-  const cfloat<nbits, es, bt, hasSubnormals, hasSupernormals, isSaturating>& rhs);
-
-
-#define OP(T, _)                                                                                                 \
-  template<size_t nbits, size_t es, typename bt, bool hasSubnormals, bool hasSupernormals, bool isSaturating> \
-  inline C10_HOST_DEVICE cfloat<nbits, es, bt, hasSubnormals, hasSupernormals, isSaturating> operator+(       \
-    T lhs,                                                                                                    \
-    const cfloat<nbits, es, bt, hasSubnormals, hasSupernormals, isSaturating>& rhs);                          \
-                                                                                                              \
-  template<size_t nbits, size_t es, typename bt, bool hasSubnormals, bool hasSupernormals, bool isSaturating> \
-  inline C10_HOST_DEVICE cfloat<nbits, es, bt, hasSubnormals, hasSupernormals, isSaturating> operator-(       \
-    T lhs,                                                                                                    \
-    const cfloat<nbits, es, bt, hasSubnormals, hasSupernormals, isSaturating>& rhs);                          \
-                                                                                                              \
-  template<size_t nbits, size_t es, typename bt, bool hasSubnormals, bool hasSupernormals, bool isSaturating> \
-  inline C10_HOST_DEVICE cfloat<nbits, es, bt, hasSubnormals, hasSupernormals, isSaturating> operator*(       \
-    T lhs,                                                                                                    \
-    const cfloat<nbits, es, bt, hasSubnormals, hasSupernormals, isSaturating>& rhs);                          \
-                                                                                                              \
-  template<size_t nbits, size_t es, typename bt, bool hasSubnormals, bool hasSupernormals, bool isSaturating> \
-  inline C10_HOST_DEVICE cfloat<nbits, es, bt, hasSubnormals, hasSupernormals, isSaturating> operator/(       \
-    T lhs,                                                                                                    \
-    const cfloat<nbits, es, bt, hasSubnormals, hasSupernormals, isSaturating>& rhs);                          \
-                                                                                                              \
-  template<size_t nbits, size_t es, typename bt, bool hasSubnormals, bool hasSupernormals, bool isSaturating> \
-  inline C10_HOST_DEVICE cfloat<nbits, es, bt, hasSubnormals, hasSupernormals, isSaturating> operator+(       \
-    const cfloat<nbits, es, bt, hasSubnormals, hasSupernormals, isSaturating>& lhs,                           \
-    T rhs);                                                                                                   \
-                                                                                                              \
-  template<size_t nbits, size_t es, typename bt, bool hasSubnormals, bool hasSupernormals, bool isSaturating> \
-  inline C10_HOST_DEVICE cfloat<nbits, es, bt, hasSubnormals, hasSupernormals, isSaturating> operator-(       \
-    const cfloat<nbits, es, bt, hasSubnormals, hasSupernormals, isSaturating>& lhs,                           \
-    T rhs);                                                                                                   \
-                                                                                                              \
-  template<size_t nbits, size_t es, typename bt, bool hasSubnormals, bool hasSupernormals, bool isSaturating> \
-  inline C10_HOST_DEVICE cfloat<nbits, es, bt, hasSubnormals, hasSupernormals, isSaturating> operator*(       \
-    const cfloat<nbits, es, bt, hasSubnormals, hasSupernormals, isSaturating>& lhs,                           \
-    T rhs);                                                                                                   \
-                                                                                                              \
-  template<size_t nbits, size_t es, typename bt, bool hasSubnormals, bool hasSupernormals, bool isSaturating> \
-  inline C10_HOST_DEVICE cfloat<nbits, es, bt, hasSubnormals, hasSupernormals, isSaturating> operator/(       \
-    const cfloat<nbits, es, bt, hasSubnormals, hasSupernormals, isSaturating>& lhs,                           \
-    T rhs);
-FORALL_SUPPORTED_TYPES_IN_OPERATORS(OP)
-#undef OP
-
-// blockbinary methods
-extern template C10_HOST_DEVICE bool blockbinary<8, uint32_t, BinaryNumberType::Signed>::isallones() const noexcept;
-extern template C10_HOST_DEVICE void blockbinary<8, uint32_t, BinaryNumberType::Signed>::clear() noexcept;
-extern template C10_HOST_DEVICE void blockbinary<8, uint32_t, BinaryNumberType::Signed>::setbits(uint64_t value) noexcept;
-#pragma push_macro("setbit")
-#undef setbit
-extern template C10_HOST_DEVICE void blockbinary<8, uint32_t, BinaryNumberType::Signed>::setbit(size_t i, bool v) noexcept;
-#pragma pop_macro("setbit")
-
-// cfloat methods that handle blockbinary
-extern template C10_HOST_DEVICE void cfloat<32, 8, uint32_t, true, false, false>::exponent(
-  blockbinary<8, uint32_t, BinaryNumberType::Signed>& e) const;
-
-// isnan and necessary methods
-template<size_t nbits, size_t es, typename bt, bool hasSubnormals, bool hasSupernormals, bool isSaturating>
-inline C10_HOST_DEVICE bool isnan(const cfloat<nbits, es, bt, hasSubnormals, hasSupernormals, isSaturating>& a);
-
-extern template C10_HOST_DEVICE bool cfloat<32, 8, uint32_t, true, false, false>::isnan(int NaNType) const noexcept;
-extern template C10_HOST_DEVICE bool cfloat<32, 8, uint32_t, true, false, false>::isnanencoding(int NaNType) const noexcept;
-extern template C10_HOST_DEVICE bool cfloat<32, 8, uint32_t, true, false, false>::issupernormal() const noexcept;
-extern template C10_HOST_DEVICE bool cfloat<32, 8, uint32_t, true, false, false>::isinf(int InfType) const noexcept;
-extern template C10_HOST_DEVICE bool cfloat<32, 8, uint32_t, true, false, false>::ispos() const noexcept;
-extern template C10_HOST_DEVICE bool cfloat<32, 8, uint32_t, true, false, false>::isneg() const noexcept;
-extern template C10_HOST_DEVICE bool cfloat<32, 8, uint32_t, true, false, false>::sign() const noexcept;
-
-// Instantiate cfloat methods and make them __host__ __device__
-template C10_HOST_DEVICE cfloat<32, 8, uint32_t, true, false, false>& cfloat<32, 8, uint32_t, true, false, false>::convert_ieee754<float>(float rhs) noexcept;
-
-#pragma diag_default 20040
-
-}
-}
 
 namespace c10 {
 

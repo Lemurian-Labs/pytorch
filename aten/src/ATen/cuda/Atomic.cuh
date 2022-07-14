@@ -3,6 +3,8 @@
 #include <cuda.h>
 #include <c10/util/Half.h>
 #include <c10/util/BFloat16.h>
+#include <c10/util/UniversalTypes.h>
+#include <c10/core/ScalarType.h>
 
 template <typename T>
 struct AtomicFPOp;
@@ -66,6 +68,48 @@ struct AtomicFPOp<double> {
     } while (assumed != old);
 
     return __longlong_as_double(old);
+  }
+};
+
+template <>
+struct AtomicFPOp<at::CFloatWithSubnormals> {
+  template <typename func_t>
+  inline __device__ double operator() (at::CFloatWithSubnormals * address, at::CFloatWithSubnormals val, const func_t& func) {
+    uint32_t* address_as_ui = (unsigned int*)address;
+    uint32_t old = *address_as_ui;
+    uint32_t assumed;
+
+    at::CFloatWithSubnormals cfsum;
+    do {
+      assumed = old;
+      cfsum.setblock(0, old);
+      cfsum = func(cfsum, val);
+      old = atomicCAS(address_as_ui, assumed, cfsum.block(0));
+      // Note: uses integer comparison to avoid hang in case of NaN (since NaN != NaN)
+    } while (assumed != old);
+
+    return cfsum;
+  }
+};
+
+template <>
+struct AtomicFPOp<at::LNS16> {
+  template <typename func_t>
+  inline __device__ double operator() (at::LNS16 * address, at::LNS16 val, const func_t& func) {
+    uint16_t* address_as_ui = (uint16_t*)address;
+    uint16_t old = *address_as_ui;
+    uint16_t assumed;
+
+    at::LNS16 sum;
+    do {
+      assumed = old;
+      sum.setbits(old);
+      sum = func(sum, val);
+      old = atomicCAS(address_as_ui, assumed, sum.block(0));
+      // Note: uses integer comparison to avoid hang in case of NaN (since NaN != NaN)
+    } while (assumed != old);
+
+    return sum;
   }
 };
 
@@ -196,6 +240,18 @@ static inline __device__ at::BFloat16 gpuAtomicAdd(at::BFloat16 *address, at::BF
                                     });
 }
 
+#define OP(T, NAME)                                             \
+  static inline __device__ T gpuAtomicAdd(T* address, T val) {  \
+    return AtomicFPOp<T>()(                                     \
+      address,                                                  \
+      val,                                                      \
+      [](T bsum, T val) {                                       \
+        return bsum + val;                                      \
+      });                                                       \
+  }
+AT_FORALL_UNIVERSAL_TYPES(OP)
+#undef OP
+
 #if defined(CUDA_VERSION) && defined(__CUDA_ARCH__) && (__CUDA_ARCH__ < 600 || CUDA_VERSION < 8000)
 // from CUDA C Programmic Guide
 static inline __device__ double atomicAdd(double* address, double val)
@@ -278,6 +334,13 @@ static inline __device__ void atomicAdd(bool *address, bool val) {
   gpuAtomicAdd(address, val);
 }
 
+#define OP(T, NAME)                                             \
+  static inline __device__ void atomicAdd(T* address, T val) {  \
+    gpuAtomicAdd(address, val);                                 \
+  }
+AT_FORALL_UNIVERSAL_TYPES(OP)
+#undef OP
+
 /* Note [explicitly non-returning atomics]
  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * AMD's MI100 (gfx908) provides an optimized fp32 atomicAdd, exposed via atomicAddNoRet().
@@ -296,6 +359,11 @@ static inline __device__ void gpuAtomicAddNoReturn(bool *address, bool val) { gp
 static inline __device__ void gpuAtomicAddNoReturn(at::Half *address, at::Half val) { gpuAtomicAdd(address, val); }
 static inline __device__ void gpuAtomicAddNoReturn(at::BFloat16 *address, at::BFloat16 val) { gpuAtomicAdd(address, val); }
 static inline __device__ void gpuAtomicAddNoReturn(double *address, double val) { gpuAtomicAdd(address, val); }
+
+#define OP(T, NAME) \
+  static inline __device__ void gpuAtomicAddNoReturn(T* address, T val) { gpuAtomicAdd(address, val); }
+AT_FORALL_UNIVERSAL_TYPES(OP)
+#undef OP
 
 /* Special case fp32 atomic. */
 #if defined(USE_ROCM) && defined(__gfx908__)
@@ -325,6 +393,16 @@ inline __device__ double gpuAtomicMul(double * address, double val) {
                               [](double val, unsigned long long int assumed) {
                                 return __double_as_longlong(val * __longlong_as_double(assumed));
                               });
+}
+
+inline __device__ at::CFloatWithSubnormals gpuAtomicMul(
+    at::CFloatWithSubnormals * address, at::CFloatWithSubnormals val) {
+  return AtomicFPOp<at::CFloatWithSubnormals>()(
+    address, val,
+    [](at::CFloatWithSubnormals bsum, at::CFloatWithSubnormals val) {
+      return bsum * val;
+    }
+  );
 }
 
 // Dont use a templated function for this since the addition function defaults to the CUDA built-in.

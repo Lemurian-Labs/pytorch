@@ -41,7 +41,7 @@ C10_HOST_DEVICE inline constexpr LNS16 pi<LNS16>() {
 
 // TODO: Replace me with std::numbers::pi when C++20 is there
 template <typename T>
-constexpr T pi = c10::detail::pi<T>();
+constexpr C10_DEVICE T pi = c10::detail::pi<T>();
 
 } // namespace c10
 
