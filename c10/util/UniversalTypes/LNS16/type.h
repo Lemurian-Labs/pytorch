@@ -1,5 +1,6 @@
 #pragma once
 
+#include <c10/util/UniversalTypes/LNS16/mul.h>
 #include <c10/util/UniversalTypes/LNS16/misc.h>
 
 #include <c10/util/BFloat16.h>
