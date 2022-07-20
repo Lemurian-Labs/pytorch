@@ -200,7 +200,7 @@ extern template C10_HOST_DEVICE bool CFloat::iszeroencoding() const noexcept;
 extern template C10_HOST_DEVICE bool CFloat::at(size_t bitIndex) const noexcept;
 
 // Conversion from float and necessary methods
-extern template C10_HOST_DEVICE CFloat&
+template C10_HOST_DEVICE CFloat&
   CFloat::convert_ieee754<float>(float rhs) noexcept;
 extern template C10_HOST_DEVICE void CFloat::setnan(int NaNType) noexcept;
 extern template C10_HOST_DEVICE void CFloat::setinf(bool sign) noexcept;

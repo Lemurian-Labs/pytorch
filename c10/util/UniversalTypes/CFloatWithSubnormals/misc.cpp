@@ -41,7 +41,7 @@ template C10_HOST_DEVICE bool CFloat::iszeroencoding() const noexcept;
 template C10_HOST_DEVICE bool CFloat::at(size_t bitIndex) const noexcept;
 
 // Conversion from float and necessary methods
-template C10_HOST_DEVICE CFloat& CFloat::convert_ieee754<float>(float rhs) noexcept;
+// template C10_HOST_DEVICE CFloat& CFloat::convert_ieee754<float>(float rhs) noexcept;
 template C10_HOST_DEVICE void CFloat::setnan(int NaNType) noexcept;
 template C10_HOST_DEVICE void CFloat::setinf(bool sign) noexcept;
 template C10_HOST_DEVICE void CFloat::clear() noexcept;

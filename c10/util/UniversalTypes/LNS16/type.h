@@ -1,5 +1,8 @@
 #pragma once
 
+#include <c10/util/UniversalTypes/LNS16/blockbinary.h>
+#include <c10/util/UniversalTypes/LNS16/add.h>
+#include <c10/util/UniversalTypes/LNS16/div.h>
 #include <c10/util/UniversalTypes/LNS16/mul.h>
 #include <c10/util/UniversalTypes/LNS16/misc.h>
 
@@ -53,7 +56,7 @@ public:
   constexpr C10_HOST_DEVICE LNS16(uint16_t bits, from_bits_t) :
     Base()
   {
-    // FIXME
+    setbits(bits);
   }
 
   C10_HOST_DEVICE operator float() const noexcept
@@ -193,7 +196,7 @@ public:
   // ATen requires unary minus to be constexpr
   constexpr C10_HOST_DEVICE LNS16 operator-() const
   {
-    return *this; // FIXME
+    return Base::operator-();
   }
   C10_HOST_DEVICE LNS16& operator+=(const LNS16& right)
   {

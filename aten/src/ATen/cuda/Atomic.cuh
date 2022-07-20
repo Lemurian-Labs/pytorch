@@ -395,15 +395,17 @@ inline __device__ double gpuAtomicMul(double * address, double val) {
                               });
 }
 
-inline __device__ at::CFloatWithSubnormals gpuAtomicMul(
-    at::CFloatWithSubnormals * address, at::CFloatWithSubnormals val) {
-  return AtomicFPOp<at::CFloatWithSubnormals>()(
-    address, val,
-    [](at::CFloatWithSubnormals bsum, at::CFloatWithSubnormals val) {
-      return bsum * val;
-    }
-  );
-}
+#define OP(T, NAME)                                     \
+  inline __device__ T gpuAtomicMul(T* address, T val) { \
+    return AtomicFPOp<T>()(                             \
+      address, val,                                     \
+      [](T bsum, T val) {                               \
+        return bsum * val;                              \
+      }                                                 \
+    );                                                  \
+  }
+AT_FORALL_UNIVERSAL_TYPES(OP)
+#undef OP
 
 // Dont use a templated function for this since the addition function defaults to the CUDA built-in.
 inline __device__ float gpuAtomicMul (float * address, float val) {
