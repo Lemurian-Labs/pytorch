@@ -383,13 +383,13 @@ public:
   static constexpr c10::CFloatWithSubnormals min() { // return minimum value
     return c10::CFloatWithSubnormals(numeric_limits<c10::CFloatWithSubnormals::Base>::min());
   }
-  static constexpr c10::CFloatWithSubnormals max() { // return maximum value
+  static constexpr C10_HOST_DEVICE c10::CFloatWithSubnormals max() { // return maximum value
     return c10::CFloatWithSubnormals(numeric_limits<c10::CFloatWithSubnormals::Base>::max());
   }
-  static constexpr c10::CFloatWithSubnormals lowest() { // return most negative value
+  static constexpr C10_HOST_DEVICE c10::CFloatWithSubnormals lowest() { // return most negative value
     return c10::CFloatWithSubnormals(numeric_limits<c10::CFloatWithSubnormals::Base>::lowest());
   }
-  static CONSTEXPRESSION c10::CFloatWithSubnormals epsilon() { // return smallest effective increment from 1.0
+  static CONSTEXPRESSION C10_HOST_DEVICE c10::CFloatWithSubnormals epsilon() { // return smallest effective increment from 1.0
     return c10::CFloatWithSubnormals(numeric_limits<c10::CFloatWithSubnormals::Base>::epsilon());
   }
   static CONSTEXPRESSION c10::CFloatWithSubnormals round_error() { // return largest rounding error
@@ -398,7 +398,7 @@ public:
   static constexpr c10::CFloatWithSubnormals denorm_min() {  // return minimum denormalized value
     return c10::CFloatWithSubnormals(numeric_limits<c10::CFloatWithSubnormals::Base>::denorm_min());
   }
-  static constexpr c10::CFloatWithSubnormals infinity() { // return positive infinity
+  static constexpr C10_HOST_DEVICE c10::CFloatWithSubnormals infinity() { // return positive infinity
     return c10::CFloatWithSubnormals(numeric_limits<c10::CFloatWithSubnormals::Base>::infinity());
   }
   static constexpr c10::CFloatWithSubnormals quiet_NaN() { // return non-signaling NaN

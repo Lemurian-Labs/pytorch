@@ -7,11 +7,9 @@ namespace universal {
 #pragma diag_suppress 20040
 
 // cfloat constructor
-template C10_HOST_DEVICE CFloat::cfloat() noexcept;
 template C10_HOST_DEVICE void CFloat::setblock(size_t b, uint32_t data) noexcept;
 
 // blockbinary constructor and methods
-template C10_HOST_DEVICE BlockBinary::blockbinary() noexcept;
 template C10_HOST_DEVICE bool BlockBinary::isallones() const noexcept;
 template C10_HOST_DEVICE bool BlockBinary::iszero() const noexcept;
 template C10_HOST_DEVICE void BlockBinary::clear() noexcept;

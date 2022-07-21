@@ -152,6 +152,22 @@ public:
   FORALL_ADDITIONAL_TYPES(OP)
   #undef OP
 
+  #define OP(T)                                    \
+    C10_HOST_DEVICE bool operator==(T right) const \
+    {                                              \
+      return sw::universal::operator==(            \
+        static_cast<Base>(*this),                  \
+        static_cast<Base>(right));                 \
+    }                                              \
+    C10_HOST_DEVICE bool operator!=(T right) const \
+    {                                              \
+      return sw::universal::operator!=(            \
+        static_cast<Base>(*this),                  \
+        static_cast<Base>(right));                 \
+    }
+  FORALL_SUPPORTED_TYPES(OP)
+  #undef OP
+
   // Assignment operators
   #define OP(T)                               \
     C10_HOST_DEVICE LNS16& operator=(T value) \
@@ -168,7 +184,7 @@ public:
   }
   C10_HOST_DEVICE LNS16& operator=(bool value)
   {
-    convert_signed(value);
+    convert_unsigned(value);
     return *this;
   }
   C10_HOST_DEVICE LNS16& operator=(long value)
@@ -432,14 +448,14 @@ public:
   static constexpr c10::LNS16 min() { // return minimum value
     return c10::LNS16(numeric_limits<c10::LNS16::Base>::min());
   }
-  static constexpr c10::LNS16 max() { // return maximum value
+  static constexpr C10_HOST_DEVICE c10::LNS16 max() { // return maximum value
     return c10::LNS16(numeric_limits<c10::LNS16::Base>::max());
   }
-  static constexpr c10::LNS16 lowest() { // return most negative value
+  static constexpr C10_HOST_DEVICE c10::LNS16 lowest() { // return most negative value
     return c10::LNS16(); // FIXME
     // return c10::LNS16(numeric_limits<c10::LNS16::Base>::lowest());
   }
-  static CONSTEXPRESSION c10::LNS16 epsilon() { // return smallest effective increment from 1.0
+  static CONSTEXPRESSION C10_HOST_DEVICE c10::LNS16 epsilon() { // return smallest effective increment from 1.0
     return c10::LNS16(numeric_limits<c10::LNS16::Base>::epsilon());
   }
   static CONSTEXPRESSION c10::LNS16 round_error() { // return largest rounding error
@@ -448,7 +464,7 @@ public:
   static constexpr c10::LNS16 denorm_min() {  // return minimum denormalized value
     return c10::LNS16(numeric_limits<c10::LNS16::Base>::denorm_min());
   }
-  static constexpr c10::LNS16 infinity() { // return positive infinity
+  static constexpr C10_HOST_DEVICE c10::LNS16 infinity() { // return positive infinity
     return c10::LNS16(); // FIXME
     // return c10::LNS16(numeric_limits<c10::LNS16::Base>::infinity());
   }

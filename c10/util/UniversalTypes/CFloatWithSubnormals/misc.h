@@ -221,9 +221,6 @@ extern template C10_HOST_DEVICE int CFloat::to_int() const;
 extern template C10_HOST_DEVICE long CFloat::to_long() const;
 extern template C10_HOST_DEVICE long long CFloat::to_long_long() const;
 
-// extractFields and necessary functions (required for conversion from float and from double)
-inline C10_HOST_DEVICE void extractFields(float value, bool& s, uint64_t& rawExponentBits, uint64_t& rawFractionBits);
-
 // operator=
 extern template C10_HOST_DEVICE CFloat& CFloat::operator=(
   float rhs) noexcept;

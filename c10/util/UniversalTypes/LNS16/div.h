@@ -13,6 +13,14 @@ namespace universal {
 template C10_HOST_DEVICE LNS16& LNS16::operator/=(const LNS16& rhs);
 template C10_HOST_DEVICE LNS16& LNS16::operator/=(double rhs);
 
+// Nonmember operators
+template<size_t nbits, size_t rbits, typename bt>
+inline C10_HOST_DEVICE lns<nbits, rbits, bt> operator/(const lns<nbits, rbits, bt>& lhs, const lns<nbits, rbits, bt>& rhs);
+template<size_t nbits, size_t rbits, typename bt>
+inline C10_HOST_DEVICE lns<nbits, rbits, bt> operator/(const lns<nbits, rbits, bt>& lhs, double rhs);
+template<size_t nbits, size_t rbits, typename bt>
+inline C10_HOST_DEVICE lns<nbits, rbits, bt> operator/(double lhs, const lns<nbits, rbits, bt>& rhs);
+
 #pragma diag_default 20040
 
 }

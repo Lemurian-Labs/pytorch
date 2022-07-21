@@ -1,5 +1,6 @@
 #pragma once
 
+#include <c10/util/UniversalTypes/common.h>
 #include <c10/util/UniversalTypes/CFloatWithSubnormals/type.h>
 #include <c10/util/UniversalTypes/LNS16/type.h>
 
