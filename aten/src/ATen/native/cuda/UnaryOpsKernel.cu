@@ -33,11 +33,20 @@ void bitwise_not_kernel_cuda(TensorIteratorBase& iter) {
 }
 
 void exp_kernel_cuda(TensorIteratorBase& iter) {
-  AT_DISPATCH_FLOATING_AND_COMPLEX_TYPES_AND_UNIVERSAL_AND2(at::ScalarType::Half, at::ScalarType::BFloat16, iter.common_dtype(), "exp_cuda", [&]() {
-    gpu_kernel(iter, []GPU_LAMBDA(scalar_t a) -> scalar_t {
-      return std::exp(a);
+  if (isUniversalType(iter.common_dtype())) {
+    AT_DISPATCH_UNIVERSAL_TYPES(iter.common_dtype(), "exp_cuda", [&]() {
+      gpu_kernel(iter, []GPU_LAMBDA(scalar_t a) -> scalar_t {
+        // We need to explicitly use exp from CUDAMathCompat
+        return std::exp(static_cast<float>(a));
+      });
     });
-  });
+  } else {
+    AT_DISPATCH_FLOATING_AND_COMPLEX_TYPES_AND2(at::ScalarType::Half, at::ScalarType::BFloat16, iter.common_dtype(), "exp_cuda", [&]() {
+      gpu_kernel(iter, []GPU_LAMBDA(scalar_t a) -> scalar_t {
+        return std::exp(a);
+      });
+    });
+  }
 }
 
 void expm1_kernel_cuda(TensorIteratorBase& iter) {

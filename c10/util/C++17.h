@@ -114,7 +114,8 @@ using void_t = typename make_void<Ts...>::type;
 #define CUDA_HOST_DEVICE C10_HOST_DEVICE
 #endif
 
-#ifdef __cpp_lib_apply
+// std::apply is not available on the device
+#if false //def __cpp_lib_apply
 
 template <class F, class Tuple>
 CUDA_HOST_DEVICE inline constexpr decltype(auto) apply(F&& f, Tuple&& t) {

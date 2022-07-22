@@ -9,9 +9,13 @@ namespace universal {
 #pragma diag_suppress 20040
 
 // extractFields and necessary functions (required for conversion from float and from double)
+#if BIT_CAST_SUPPORT
+template inline C10_HOST_DEVICE void extractFields(float value, bool& s, uint64_t& rawExponentBits, uint64_t& rawFractionBits) noexcept;
+template inline C10_HOST_DEVICE void extractFields(double value, bool& s, uint64_t& rawExponentBits, uint64_t& rawFractionBits) noexcept;
+#else
 inline C10_HOST_DEVICE void extractFields(float value, bool& s, uint64_t& rawExponentBits, uint64_t& rawFractionBits);
 inline C10_HOST_DEVICE void extractFields(double value, bool& s, uint64_t& rawExponentBits, uint64_t& rawFractionBits);
-
+#endif
 
 #pragma diag_default 20040
 

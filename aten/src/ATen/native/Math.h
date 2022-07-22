@@ -11,7 +11,6 @@
 #include <c10/util/Half.h>
 #include <c10/util/MathConstants.h>
 #include <c10/util/math_compat.h>
-#include <c10/util/UniversalTypes-math.h>
 #include <ATen/AccumulateType.h>
 
 C10_CLANG_DIAGNOSTIC_PUSH()

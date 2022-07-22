@@ -1,10 +1,12 @@
 #pragma once
 
+#include <c10/util/UniversalTypes/common.h>
 #include <c10/util/UniversalTypes/LNS16/blockbinary.h>
 #include <c10/util/UniversalTypes/LNS16/add.h>
 #include <c10/util/UniversalTypes/LNS16/div.h>
 #include <c10/util/UniversalTypes/LNS16/mul.h>
 #include <c10/util/UniversalTypes/LNS16/misc.h>
+#include <c10/util/UniversalTypes/LNS16/numeric_limits.h>
 
 #include <c10/util/BFloat16.h>
 #include <c10/util/Half.h>
@@ -152,6 +154,18 @@ public:
   FORALL_ADDITIONAL_TYPES(OP)
   #undef OP
 
+  C10_HOST_DEVICE bool operator==(const LNS16& right) const
+  {
+    return sw::universal::operator==(
+      static_cast<Base>(*this),
+      static_cast<Base>(right));
+  }
+  C10_HOST_DEVICE bool operator!=(const LNS16& right) const
+  {
+    return sw::universal::operator!=(
+      static_cast<Base>(*this),
+      static_cast<Base>(right));
+  }
   #define OP(T)                                    \
     C10_HOST_DEVICE bool operator==(T right) const \
     {                                              \
