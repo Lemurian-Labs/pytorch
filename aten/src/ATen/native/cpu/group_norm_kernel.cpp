@@ -357,7 +357,7 @@ void GammaBackward(
   constexpr int64_t K = vec::Vectorized<T>::size();
   at::parallel_for(0, D, K, [=](int64_t start, int64_t end) {
     for (const auto i : c10::irange(G)) {
-      std::memset(dgamma + i * D + start, 0, (end - start) * sizeof(T));
+      c10::memset_0_if_supported(dgamma + i * D + start, end - start);
     }
     for (int64_t i = 0; i < N * G; ++i) {
       const T* ds_ptr = ds + i * D;
@@ -375,7 +375,7 @@ template <typename T>
 void BetaBackward(int64_t N, int64_t C, const T* db, T* dbeta) {
   constexpr int64_t K = vec::Vectorized<T>::size();
   at::parallel_for(0, C, K, [=](int64_t start, int64_t end) {
-    std::memset(dbeta + start, 0, (end - start) * sizeof(T));
+    c10::memset_0_if_supported(dbeta + start, end - start);
     for (const auto i : c10::irange(N)) {
       const T* db_ptr = db + i * C;
       for (const auto j : c10::irange(start, end)) {

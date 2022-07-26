@@ -55,6 +55,7 @@ template C10_HOST_DEVICE void LNS16::setzero() noexcept;
 template C10_HOST_DEVICE void LNS16::setbits(uint64_t value) noexcept;
 template C10_HOST_DEVICE void LNS16::setinf(bool sign) noexcept;
 template C10_HOST_DEVICE LNS16& LNS16::maxneg() noexcept;
+template C10_HOST_DEVICE LNS16& LNS16::minpos() noexcept;
 template C10_HOST_DEVICE LNS16& LNS16::maxpos() noexcept;
 template C10_HOST_DEVICE void LNS16::clear() noexcept;
 template C10_HOST_DEVICE LNS16& LNS16::flip() noexcept;

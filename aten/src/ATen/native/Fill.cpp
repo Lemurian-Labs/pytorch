@@ -114,7 +114,7 @@ Tensor& fill_diagonal_(Tensor& self, const Scalar& fill_value, bool wrap) {
 
 Tensor& zero_cpu_(Tensor &self, int64_t nelements) {
   void* ptr = self.data_ptr();
-  if (nullptr == ptr) {
+  if (nullptr == ptr || !c10::supportsMemset0(self.scalar_type())) {
     return self.fill_(0);
   }
   int64_t size_bytes = nelements * self.dtype().itemsize();

@@ -805,7 +805,7 @@ struct ApplyGridSample<scalar_t, 2, GridSamplerInterpolation::Nearest,
 
     // grid has zero 0 gradient in Nearest mode
     auto gGrid_ptr = gGrid_slice.data() + offset * 2;
-    std::memset(gGrid_ptr, 0, sizeof(scalar_t) * len * 2);
+    c10::memset_0_if_supported(gGrid_ptr, len * 2);
   }
 };
 

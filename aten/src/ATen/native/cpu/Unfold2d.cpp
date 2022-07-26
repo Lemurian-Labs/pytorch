@@ -194,44 +194,39 @@ static void unfolded2d_copy(
             for (y = 0; y < output_height; y++) {
               iy = (int64_t)y * dH - padH + kh;
               if (iy < 0 || iy >= input_height) {
-                memset(
+                c10::memset_0_if_supported(
                     dst + (size_t)y * output_width,
-                    0,
-                    sizeof(scalar_t) * output_width);
+                    output_width);
               } else {
                 if (dW == 1) {
                   ix = 0 - padW + kw;
                   lpad = std::max<int64_t>(0, padW - kw);
                   rpad = std::max<int64_t>(0, padW - (kW - kw - 1));
                   if (output_width - rpad - lpad <= 0) {
-                    memset(
+                    c10::memset_0_if_supported(
                         dst + (size_t)y * output_width,
-                        0,
-                        sizeof(scalar_t) * output_width);
+                        output_width);
                   } else {
                     if (lpad > 0)
-                      memset(
+                      c10::memset_0_if_supported(
                           dst + (size_t)y * output_width,
-                          0,
-                          sizeof(scalar_t) * lpad);
+                          lpad);
                     memcpy(
                         dst + (size_t)y * output_width + lpad,
                         src + (size_t)iy * input_width + ix + lpad,
                         sizeof(scalar_t) * (output_width - rpad - lpad));
                     if (rpad > 0)
-                      memset(
+                      c10::memset_0_if_supported(
                           dst + (size_t)y * output_width + output_width - rpad,
-                          0,
-                          sizeof(scalar_t) * rpad);
+                          rpad);
                   }
                 } else {
                   for (x = 0; x < output_width; x++) {
                     ix = (int64_t)x * dW - padW + kw;
                     if (ix < 0 || ix >= input_width)
-                      memset(
+                    c10::memset_0_if_supported(
                           dst + (size_t)y * output_width + x,
-                          0,
-                          sizeof(scalar_t) * 1);
+                          1);
                     else
                       memcpy(
                           dst + (size_t)y * output_width + x,

@@ -275,14 +275,14 @@ void Unfold3dCopyKernelImpl(
       for (const auto yd : c10::irange(Y_D)) {
         const int64_t xd = yd * stride_d - pad_d + kd;
         if (!IsAGeZeroAndALtB(xd, X_D)) {
-          std::memset(dst_ptr + yd * Y_H * Y_W, 0, Y_H * Y_W * sizeof(T));
+          c10::memset_0_if_supported(dst_ptr + yd * Y_H * Y_W, Y_H * Y_W);
           continue;
         }
         for (const auto yh : c10::irange(Y_H)) {
           const int64_t xh = yh * stride_h - pad_h + kh;
           if (!IsAGeZeroAndALtB(xh, X_H)) {
-            std::memset(
-                dst_ptr + yd * Y_H * Y_W + yh * Y_W, 0, Y_W * sizeof(T));
+            c10::memset_0_if_supported(
+                dst_ptr + yd * Y_H * Y_W + yh * Y_W, Y_W);
             continue;
           }
           for (const auto yw : c10::irange(Y_W)) {
@@ -318,7 +318,7 @@ void Unfold3dZeroPaddingAccKernelImpl(
   const int64_t Y_size = Y_D * Y_H * Y_W;
   const int64_t kernel_size = kernel_d * kernel_h * kernel_w;
   at::parallel_for(0, C, 0, [=](int64_t begin, int64_t end) {
-    std::memset(dst + begin * X_size, 0, (end - begin) * X_size * sizeof(T));
+    c10::memset_0_if_supported(dst + begin * X_size, (end - begin) * X_size);
     for (const auto c : c10::irange(begin, end)) {
       for (const auto kd : c10::irange(kernel_d)) {
         for (const auto kh : c10::irange(kernel_h)) {
@@ -393,7 +393,7 @@ void Unfold3dAccKernelImpl(
   const int64_t Y_size = Y_D * Y_H * Y_W;
   const int64_t kernel_size = kernel_d * kernel_h * kernel_w;
   at::parallel_for(0, C, 0, [=](int64_t begin, int64_t end) {
-    std::memset(dst + begin * X_size, 0, (end - begin) * X_size * sizeof(T));
+    c10::memset_0_if_supported(dst + begin * X_size, (end - begin) * X_size);
     for (const auto c : c10::irange(begin, end)) {
       T* dst_ptr = dst + c * X_size;
       for (const auto kd : c10::irange(kernel_d)) {

@@ -27,4 +27,22 @@ struct is_universal_type :
     is_universal_floating_point<T>::value> {
 };
 
+// Checks whether the type behaves correcly if we memset it to 0
+// (For example, if we memset LNS16 to 0, the result will be 1, and not 0)
+template <typename T>
+struct supports_memset_0 :
+  std::integral_constant<bool,
+    !std::is_same<T, LNS16>::value> {
+};
+
+template <typename T>
+void memset_0_if_supported(T* ptr, size_t n_elements)
+{
+  if constexpr (supports_memset_0<T>::value) {
+    std::memset(ptr, 0, n_elements * sizeof(T));
+  } else {
+    std::fill_n(ptr, n_elements, 0);
+  }
+}
+
 }

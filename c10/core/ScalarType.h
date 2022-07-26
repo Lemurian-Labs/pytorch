@@ -336,6 +336,12 @@ static inline bool isUniversalFloatingPointType(ScalarType t) {
   return t == ScalarType::CFloatWithSubnormals || t == ScalarType::LNS16;
 }
 
+// Checks whether the type behaves correcly if we memset it to 0
+// (For example, if we memset LNS16 to 0, the result will be 1, and not 0)
+static inline bool supportsMemset0(ScalarType t) {
+  return t != ScalarType::LNS16;
+}
+
 static inline ScalarType toQIntType(ScalarType t) {
   switch (t) {
     case ScalarType::Byte:

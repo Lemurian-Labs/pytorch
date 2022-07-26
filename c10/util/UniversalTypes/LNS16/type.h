@@ -460,13 +460,19 @@ template<> class numeric_limits<c10::LNS16>
 public:
   static constexpr bool is_specialized = true;
   static constexpr c10::LNS16 min() { // return minimum value
-    return c10::LNS16(numeric_limits<c10::LNS16::Base>::min());
+    c10::LNS16 result {};
+    result.minpos();
+    return result;
   }
   static constexpr C10_HOST_DEVICE c10::LNS16 max() { // return maximum value
-    return c10::LNS16(numeric_limits<c10::LNS16::Base>::max());
+    c10::LNS16 result {};
+    result.maxpos();
+    return result;
   }
   static constexpr C10_HOST_DEVICE c10::LNS16 lowest() { // return most negative value
-    return c10::LNS16(); // FIXME
+    c10::LNS16 result {};
+    result.maxneg();
+    return result;
     // return c10::LNS16(numeric_limits<c10::LNS16::Base>::lowest());
   }
   static CONSTEXPRESSION C10_HOST_DEVICE c10::LNS16 epsilon() { // return smallest effective increment from 1.0
@@ -479,7 +485,9 @@ public:
     return c10::LNS16(numeric_limits<c10::LNS16::Base>::denorm_min());
   }
   static constexpr C10_HOST_DEVICE c10::LNS16 infinity() { // return positive infinity
-    return c10::LNS16(); // FIXME
+    c10::LNS16 result {};
+    result.maxpos();
+    return result;
     // return c10::LNS16(numeric_limits<c10::LNS16::Base>::infinity());
   }
   static constexpr c10::LNS16 quiet_NaN() { // return non-signaling NaN

@@ -82,7 +82,7 @@ static void col2vol(
     const int64_t dilationW,
     T* data_vol) {
   int64_t c, t, h, w;
-  memset(data_vol, 0, sizeof(T) * depth * height * width * channels);
+  c10::memset_0_if_supported(data_vol, depth * height * width * channels);
   int64_t depth_col = out_depth;
   int64_t height_col = out_height;
   int64_t width_col = out_width;
