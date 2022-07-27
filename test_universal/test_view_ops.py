@@ -128,8 +128,9 @@ class TestViewOps(TestCase):
         s = t.conj()
         self.assertTrue(s is t)
 
+    # This test does not work for lns16 since there is no numpy equivalent
     @onlyNativeDeviceTypes
-    @dtypes(*universal_types())
+    @dtypes(*[dtype for dtype in universal_types() in dtype != torch.lns16])
     def test_view_dtype_new(self, device, dtype):
         dtypes = torch_to_numpy_dtype_dict.copy()
         del dtypes[torch.bool]

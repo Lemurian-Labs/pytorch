@@ -163,7 +163,7 @@ class TestScatterGather(TestCase):
 # Generic Device Test Framework instantation, see
 #   https://github.com/pytorch/pytorch/wiki/Running-and-writing-tests
 #   for details.
-instantiate_device_type_tests(TestScatterGather, globals(), only_for='cpu')
+instantiate_device_type_tests(TestScatterGather, globals(), only_for=('cpu', 'cuda'))
 
 if __name__ == '__main__':
     run_tests()

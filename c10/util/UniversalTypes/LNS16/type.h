@@ -510,7 +510,8 @@ public:
   static constexpr int max_exponent   = numeric_limits<c10::LNS16::Base>::max_exponent;
   static constexpr int max_exponent10 = numeric_limits<c10::LNS16::Base>::max_exponent10;
   static constexpr bool has_infinity  = numeric_limits<c10::LNS16::Base>::has_infinity;
-  static constexpr bool has_quiet_NaN = numeric_limits<c10::LNS16::Base>::has_quiet_NaN;
+  // Required by overflows in certain situations (c10/util/Half.h)
+  static constexpr bool has_quiet_NaN = true; // numeric_limits<c10::LNS16::Base>::has_quiet_NaN;
   static constexpr bool has_signaling_NaN = numeric_limits<c10::LNS16::Base>::has_signaling_NaN;
   static constexpr float_denorm_style has_denorm = numeric_limits<c10::LNS16::Base>::has_denorm;
   static constexpr bool has_denorm_loss = numeric_limits<c10::LNS16::Base>::has_denorm_loss;

@@ -39,7 +39,10 @@ universal_fp_limit = {
     torch.lns16: 2**63,
 }
 
-_universal_types = _dispatch_dtypes((torch.cfloatwithsubnormals, torch.lns16))
+_universal_types = _dispatch_dtypes((
+    torch.cfloatwithsubnormals,
+    torch.lns16,
+))
 def universal_types():
     """Returns all Universal types"""
     return _universal_types

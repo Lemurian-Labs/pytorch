@@ -75,7 +75,7 @@ class PruningOpTest(TestCase):
     def test_rowwise_prune_op_64bit_indices(self, embedding_rows, embedding_dims, weights_dtype):
         self._test_rowwise_prune_op(embedding_rows, embedding_dims, torch.int64, weights_dtype)
 
-instantiate_device_type_tests(PruningOpTest, globals(), only_for='cpu')
+instantiate_device_type_tests(PruningOpTest, globals(), only_for=('cpu', 'cuda'))
 
 if __name__ == '__main__':
     run_tests()
