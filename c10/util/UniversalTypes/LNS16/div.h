@@ -10,16 +10,13 @@ namespace universal {
 // Suppress the warnings that __host__ functions were redeclared as __host__ __device__
 #pragma diag_suppress 20040
 
-template C10_HOST_DEVICE LNS16& LNS16::operator/=(const LNS16& rhs);
-template C10_HOST_DEVICE LNS16& LNS16::operator/=(double rhs);
+template CUDA_NOINLINE C10_HOST_DEVICE LNS16& LNS16::operator/=(const LNS16& rhs);
+template CUDA_NOINLINE C10_HOST_DEVICE LNS16& LNS16::operator/=(double rhs);
 
 // Nonmember operators
-template<size_t nbits, size_t rbits, typename bt>
-inline C10_HOST_DEVICE lns<nbits, rbits, bt> operator/(const lns<nbits, rbits, bt>& lhs, const lns<nbits, rbits, bt>& rhs);
-template<size_t nbits, size_t rbits, typename bt>
-inline C10_HOST_DEVICE lns<nbits, rbits, bt> operator/(const lns<nbits, rbits, bt>& lhs, double rhs);
-template<size_t nbits, size_t rbits, typename bt>
-inline C10_HOST_DEVICE lns<nbits, rbits, bt> operator/(double lhs, const lns<nbits, rbits, bt>& rhs);
+constexpr C10_HOST_DEVICE LNS16 operator/(const LNS16& lhs, const LNS16& rhs);
+constexpr C10_HOST_DEVICE LNS16 operator/(const LNS16& lhs, double rhs);
+constexpr C10_HOST_DEVICE LNS16 operator/(double lhs, const LNS16& rhs);
 
 #pragma diag_default 20040
 

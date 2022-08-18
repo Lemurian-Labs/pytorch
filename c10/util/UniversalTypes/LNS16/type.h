@@ -45,48 +45,48 @@ public:
 
   LNS16() = default;
 
-  C10_HOST_DEVICE LNS16(float value) : Base(value) {}
-  constexpr C10_HOST_DEVICE LNS16(Base value) : Base(value) {}
+  CUDA_NOINLINE C10_HOST_DEVICE LNS16(float value) : Base(value) {}
+  constexpr CUDA_NOINLINE C10_HOST_DEVICE LNS16(Base value) : Base(value) {}
 
   // A way to construct LNS16 from bits similar to Half and BFloat16
   struct from_bits_t {};
-  static constexpr C10_HOST_DEVICE from_bits_t from_bits()
+  static constexpr CUDA_NOINLINE C10_HOST_DEVICE from_bits_t from_bits()
   {
     return from_bits_t();
   }
 
-  constexpr C10_HOST_DEVICE LNS16(uint16_t bits, from_bits_t) :
+  constexpr CUDA_NOINLINE C10_HOST_DEVICE LNS16(uint16_t bits, from_bits_t) :
     Base()
   {
     setbits(bits);
   }
 
-  C10_HOST_DEVICE operator float() const noexcept
+  CUDA_NOINLINE C10_HOST_DEVICE operator float() const noexcept
   {
     return Base::operator float();
   }
 
   // Define operator < to avoid ambiguity
-  C10_HOST_DEVICE bool operator<(const LNS16& right) const
+  CUDA_NOINLINE C10_HOST_DEVICE bool operator<(const LNS16& right) const
   {
     return sw::universal::operator<(
       static_cast<Base>(*this),
       static_cast<Base>(right));
   }
-  C10_HOST_DEVICE bool operator<=(const LNS16& right) const
+  CUDA_NOINLINE C10_HOST_DEVICE bool operator<=(const LNS16& right) const
   {
     return sw::universal::operator<=(
       static_cast<Base>(*this),
       static_cast<Base>(right));
   }
   #define OP(T)                                    \
-    C10_HOST_DEVICE bool operator<(T right) const  \
+    CUDA_NOINLINE C10_HOST_DEVICE bool operator<(T right) const  \
     {                                              \
       return sw::universal::operator<(             \
         static_cast<Base>(*this),                  \
         static_cast<Base>(right));                 \
     }                                              \
-    C10_HOST_DEVICE bool operator<=(T right) const \
+    CUDA_NOINLINE C10_HOST_DEVICE bool operator<=(T right) const \
     {                                              \
       return sw::universal::operator<=(            \
         static_cast<Base>(*this),                  \
@@ -95,13 +95,13 @@ public:
   FORALL_SUPPORTED_TYPES(OP)
   #undef OP
   #define OP(T)                                        \
-    C10_HOST_DEVICE bool operator<(T right) const      \
+    CUDA_NOINLINE C10_HOST_DEVICE bool operator<(T right) const      \
     {                                                  \
       return sw::universal::operator<(                 \
         static_cast<Base>(*this),                      \
         static_cast<Base>(static_cast<LNS16>(right))); \
     }                                                  \
-    C10_HOST_DEVICE bool operator<=(T right) const     \
+    CUDA_NOINLINE C10_HOST_DEVICE bool operator<=(T right) const     \
     {                                                  \
       return sw::universal::operator<=(                \
         static_cast<Base>(*this),                      \
@@ -111,26 +111,26 @@ public:
   #undef OP
 
   // Define operator > to avoid ambiguity
-  C10_HOST_DEVICE bool operator>(const LNS16& right) const
+  CUDA_NOINLINE C10_HOST_DEVICE bool operator>(const LNS16& right) const
   {
     return sw::universal::operator>(
       static_cast<Base>(*this),
       static_cast<Base>(right));
   }
-  C10_HOST_DEVICE bool operator>=(const LNS16& right) const
+  CUDA_NOINLINE C10_HOST_DEVICE bool operator>=(const LNS16& right) const
   {
     return sw::universal::operator>=(
       static_cast<Base>(*this),
       static_cast<Base>(right));
   }
   #define OP(T)                                    \
-    C10_HOST_DEVICE bool operator>(T right) const  \
+    CUDA_NOINLINE C10_HOST_DEVICE bool operator>(T right) const  \
     {                                              \
       return sw::universal::operator>(             \
         static_cast<Base>(*this),                  \
         static_cast<Base>(right));                 \
     }                                              \
-    C10_HOST_DEVICE bool operator>=(T right) const \
+    CUDA_NOINLINE C10_HOST_DEVICE bool operator>=(T right) const \
     {                                              \
       return sw::universal::operator>=(            \
         static_cast<Base>(*this),                  \
@@ -139,13 +139,13 @@ public:
   FORALL_SUPPORTED_TYPES(OP)
   #undef OP
   #define OP(T)                                        \
-    C10_HOST_DEVICE bool operator>(T right) const      \
+    CUDA_NOINLINE C10_HOST_DEVICE bool operator>(T right) const      \
     {                                                  \
       return sw::universal::operator>(                 \
         static_cast<Base>(*this),                      \
         static_cast<Base>(static_cast<LNS16>(right))); \
     }                                                  \
-    C10_HOST_DEVICE bool operator>=(T right) const     \
+    CUDA_NOINLINE C10_HOST_DEVICE bool operator>=(T right) const     \
     {                                                  \
       return sw::universal::operator>=(                \
         static_cast<Base>(*this),                      \
@@ -154,26 +154,26 @@ public:
   FORALL_ADDITIONAL_TYPES(OP)
   #undef OP
 
-  C10_HOST_DEVICE bool operator==(const LNS16& right) const
+  CUDA_NOINLINE C10_HOST_DEVICE bool operator==(const LNS16& right) const
   {
     return sw::universal::operator==(
       static_cast<Base>(*this),
       static_cast<Base>(right));
   }
-  C10_HOST_DEVICE bool operator!=(const LNS16& right) const
+  CUDA_NOINLINE C10_HOST_DEVICE bool operator!=(const LNS16& right) const
   {
     return sw::universal::operator!=(
       static_cast<Base>(*this),
       static_cast<Base>(right));
   }
   #define OP(T)                                    \
-    C10_HOST_DEVICE bool operator==(T right) const \
+    CUDA_NOINLINE C10_HOST_DEVICE bool operator==(T right) const \
     {                                              \
       return sw::universal::operator==(            \
         static_cast<Base>(*this),                  \
         static_cast<Base>(right));                 \
     }                                              \
-    C10_HOST_DEVICE bool operator!=(T right) const \
+    CUDA_NOINLINE C10_HOST_DEVICE bool operator!=(T right) const \
     {                                              \
       return sw::universal::operator!=(            \
         static_cast<Base>(*this),                  \
@@ -184,39 +184,39 @@ public:
 
   // Assignment operators
   #define OP(T)                               \
-    C10_HOST_DEVICE LNS16& operator=(T value) \
+    CUDA_NOINLINE C10_HOST_DEVICE LNS16& operator=(T value) \
     {                                         \
       Base::operator=(value);                 \
       return *this;                           \
     }
   FORALL_SUPPORTED_TYPES(OP)
   #undef OP
-  C10_HOST_DEVICE LNS16& operator=(unsigned char value)
+  CUDA_NOINLINE C10_HOST_DEVICE LNS16& operator=(unsigned char value)
   {
     convert_unsigned(value);
     return *this;
   }
-  C10_HOST_DEVICE LNS16& operator=(bool value)
+  CUDA_NOINLINE C10_HOST_DEVICE LNS16& operator=(bool value)
   {
     convert_unsigned(value);
     return *this;
   }
-  C10_HOST_DEVICE LNS16& operator=(long value)
+  CUDA_NOINLINE C10_HOST_DEVICE LNS16& operator=(long value)
   {
     convert_signed(value);
     return *this;
   }
-  C10_HOST_DEVICE LNS16& operator=(uint64_t value)
+  CUDA_NOINLINE C10_HOST_DEVICE LNS16& operator=(uint64_t value)
   {
     convert_unsigned(value);
     return *this;
   }
-  C10_HOST_DEVICE LNS16& operator=(c10::BFloat16 value)
+  CUDA_NOINLINE C10_HOST_DEVICE LNS16& operator=(c10::BFloat16 value)
   {
     Base::operator=(static_cast<float>(value));
     return *this;
   }
-  C10_HOST_DEVICE LNS16& operator=(c10::Half value)
+  CUDA_NOINLINE C10_HOST_DEVICE LNS16& operator=(c10::Half value)
   {
     Base::operator=(static_cast<float>(value));
     return *this;
@@ -224,23 +224,23 @@ public:
 
   // Arithmetic operators
   // ATen requires unary minus to be constexpr
-  constexpr C10_HOST_DEVICE LNS16 operator-() const
+  constexpr CUDA_NOINLINE C10_HOST_DEVICE LNS16 operator-() const
   {
     return Base::operator-();
   }
-  C10_HOST_DEVICE LNS16& operator+=(const LNS16& right)
+  CUDA_NOINLINE C10_HOST_DEVICE LNS16& operator+=(const LNS16& right)
   {
     return static_cast<LNS16&>(Base::operator+=(right));
   }
-  C10_HOST_DEVICE LNS16& operator-=(const LNS16& right)
+  CUDA_NOINLINE C10_HOST_DEVICE LNS16& operator-=(const LNS16& right)
   {
     return static_cast<LNS16&>(Base::operator-=(right));
   }
-  C10_HOST_DEVICE LNS16& operator*=(const LNS16& right)
+  CUDA_NOINLINE C10_HOST_DEVICE LNS16& operator*=(const LNS16& right)
   {
     return static_cast<LNS16&>(Base::operator*=(right));
   }
-  C10_HOST_DEVICE LNS16& operator/=(const LNS16& right)
+  CUDA_NOINLINE C10_HOST_DEVICE LNS16& operator/=(const LNS16& right)
   {
     return static_cast<LNS16&>(Base::operator/=(right));
   }
@@ -464,18 +464,18 @@ public:
     result.minpos();
     return result;
   }
-  static constexpr C10_HOST_DEVICE c10::LNS16 max() { // return maximum value
+  static constexpr CUDA_NOINLINE C10_HOST_DEVICE c10::LNS16 max() { // return maximum value
     c10::LNS16 result {};
     result.maxpos();
     return result;
   }
-  static constexpr C10_HOST_DEVICE c10::LNS16 lowest() { // return most negative value
+  static constexpr CUDA_NOINLINE C10_HOST_DEVICE c10::LNS16 lowest() { // return most negative value
     c10::LNS16 result {};
     result.maxneg();
     return result;
     // return c10::LNS16(numeric_limits<c10::LNS16::Base>::lowest());
   }
-  static CONSTEXPRESSION C10_HOST_DEVICE c10::LNS16 epsilon() { // return smallest effective increment from 1.0
+  static CONSTEXPRESSION CUDA_NOINLINE C10_HOST_DEVICE c10::LNS16 epsilon() { // return smallest effective increment from 1.0
     return c10::LNS16(numeric_limits<c10::LNS16::Base>::epsilon());
   }
   static CONSTEXPRESSION c10::LNS16 round_error() { // return largest rounding error
@@ -484,7 +484,7 @@ public:
   static constexpr c10::LNS16 denorm_min() {  // return minimum denormalized value
     return c10::LNS16(numeric_limits<c10::LNS16::Base>::denorm_min());
   }
-  static constexpr C10_HOST_DEVICE c10::LNS16 infinity() { // return positive infinity
+  static constexpr CUDA_NOINLINE C10_HOST_DEVICE c10::LNS16 infinity() { // return positive infinity
     c10::LNS16 result {};
     result.maxpos();
     return result;

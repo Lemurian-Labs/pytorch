@@ -102,13 +102,13 @@ inline c10::LNS16 fabs(c10::LNS16 a) {
   return std::fabs(static_cast<float>(a));
 }
 
-C10_HOST_DEVICE inline c10::LNS16 nextafter(
+CUDA_NOINLINE C10_HOST_DEVICE inline c10::LNS16 nextafter(
     c10::LNS16 from,
     c10::LNS16 to) {
   return std::nextafter(static_cast<float>(from), static_cast<float>(to));
 }
 
-C10_HOST_DEVICE inline c10::LNS16 nexttoward(
+CUDA_NOINLINE C10_HOST_DEVICE inline c10::LNS16 nexttoward(
     c10::LNS16 from,
     long double to) {
   return std::nexttoward(static_cast<float>(from), to);
