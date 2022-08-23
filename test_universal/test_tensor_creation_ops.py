@@ -4072,12 +4072,12 @@ class TestAsArray(TestCase):
             t = torch.asarray(e)
             self.assertEqual(t, original)
 
-instantiate_device_type_tests(TestTensorCreation, globals(), only_for="cpu")
-instantiate_device_type_tests(TestRandomTensorCreation, globals(), only_for="cpu")
-instantiate_device_type_tests(TestLikeTensorCreation, globals(), only_for="cpu")
+instantiate_device_type_tests(TestTensorCreation, globals(), only_for=('cpu', 'cuda'))
+instantiate_device_type_tests(TestRandomTensorCreation, globals(), only_for=('cpu', 'cuda'))
+instantiate_device_type_tests(TestLikeTensorCreation, globals(), only_for=('cpu', 'cuda'))
 # TestBufferProtocol only supports CPU
 instantiate_device_type_tests(TestBufferProtocol, globals(), only_for='cpu')
-instantiate_device_type_tests(TestAsArray, globals(), only_for='cpu')
+instantiate_device_type_tests(TestAsArray, globals(), only_for=('cpu', 'cuda'))
 
 if __name__ == '__main__':
     run_tests()

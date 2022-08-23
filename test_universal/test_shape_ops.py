@@ -709,7 +709,7 @@ class TestShapeOps(TestCase):
         nz = x.nonzero()
         self.assertFalse(nz.requires_grad)
 
-instantiate_device_type_tests(TestShapeOps, globals(), only_for='cpu')
+instantiate_device_type_tests(TestShapeOps, globals(), only_for=('cpu', 'cuda'))
 
 if __name__ == '__main__':
     run_tests()

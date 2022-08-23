@@ -84,10 +84,14 @@ constexpr C10_HOST_DEVICE bool operator<=(const LNS16& lhs, double rhs);
 constexpr C10_HOST_DEVICE bool operator>=(const LNS16& lhs, double rhs);
 
 template<size_t nbits, size_t rbits, typename bt, auto... xtra>
+C10_HOST_DEVICE lns<nbits, rbits, bt, xtra...> min(lns<nbits, rbits, bt, xtra...> x, lns<nbits, rbits, bt, xtra...> y);
+template<size_t nbits, size_t rbits, typename bt, auto... xtra>
+C10_HOST_DEVICE lns<nbits, rbits, bt, xtra...> max(lns<nbits, rbits, bt, xtra...> x, lns<nbits, rbits, bt, xtra...> y);
+
+template<size_t nbits, size_t rbits, typename bt, auto... xtra>
 inline C10_HOST_DEVICE bool isinf(const lns<nbits, rbits, bt, xtra...>& a);
 template<size_t nbits, size_t rbits, typename bt, auto... xtra>
 inline C10_HOST_DEVICE bool isnan(const lns<nbits, rbits, bt, xtra...>& a);
-
 
 // LNS17 type conversion for convert_ieee754
 template CUDA_NOINLINE C10_HOST_DEVICE LNS17::operator float() const noexcept;

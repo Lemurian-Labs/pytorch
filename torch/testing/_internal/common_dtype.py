@@ -39,8 +39,9 @@ universal_fp_limit = {
     torch.lns16: 2**63,
 }
 
+# FIXME re-enable cfloatwithsubnormals after debugging lns16
 _universal_types = _dispatch_dtypes((
-    torch.cfloatwithsubnormals,
+    #torch.cfloatwithsubnormals,
     torch.lns16,
 ))
 def universal_types():

@@ -93,11 +93,12 @@ template <> inline std::string typeName<at::Half>(){
 template <> inline std::string typeName<at::BFloat16>(){
     return "at::BFloat16";
 }
-#define OP(T, NAME)                              \
-  template <> inline std::string typeName<T>(){  \
-      return "at::" #NAME;                       \
-  }
-AT_FORALL_UNIVERSAL_TYPES(OP)
-#undef OP
+#define TYPE_NAME_FN(ctype, name) \
+template <> inline std::string typeName<ctype>(){ \
+    return std::string(#ctype);    \
+}
+
+AT_FORALL_UNIVERSAL_TYPES(TYPE_NAME_FN)
+#undef TYPE_NAME_FN
 
 }}}  // namespace at::cuda::jit

@@ -1754,8 +1754,8 @@ class TestOldViewOps(TestCase):
         t.crow_indices()
         t.col_indices()
 
-instantiate_device_type_tests(TestViewOps, globals(), only_for='cpu')
-instantiate_device_type_tests(TestOldViewOps, globals(), only_for='cpu')
+instantiate_device_type_tests(TestViewOps, globals(), only_for=('cpu', 'cuda'))
+instantiate_device_type_tests(TestOldViewOps, globals(), only_for=('cpu', 'cuda'))
 
 if __name__ == '__main__':
     run_tests()

@@ -83,7 +83,8 @@ const std::string jit_common_types = R"ESCAPE(
   _(at::BFloat16, BFloat16) /* 15 */                             \
   _(void, QUInt4x2) /* 16 */                    \
   _(void, QUInt2x4) /* 17 */                    \
-  _(at::CFloatWithSubnormals, CFloatWithSubnormals)
+  _(at::CFloatWithSubnormals, CFloatWithSubnormals) \
+  _(at::LNS16, LNS16)
 
   #define AT_FORALL_SCALAR_TYPES_WITH_COMPLEX_EXCEPT_COMPLEX_HALF(_) \
   _(uint8_t, Byte)                                                 \
@@ -98,7 +99,8 @@ const std::string jit_common_types = R"ESCAPE(
   _(std::complex<double>, ComplexDouble)                           \
   _(bool, Bool)                                                    \
   _(at::BFloat16, BFloat16)                                        \
-  _(at::CFloatWithSubnormals, CFloatWithSubnormals)
+  _(at::CFloatWithSubnormals, CFloatWithSubnormals)                \
+  _(at::LNS16, LNS16)
 
 
   enum class ScalarType : int8_t {
