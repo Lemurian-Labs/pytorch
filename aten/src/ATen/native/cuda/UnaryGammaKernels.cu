@@ -15,14 +15,23 @@ namespace at { namespace native {
 const char digamma_name[] = "digamma";
 void digamma_kernel_cuda(TensorIteratorBase& iter) {
   #ifdef USE_JITERATOR
-    AT_DISPATCH_FLOATING_TYPES_AND_UNIVERSAL_AND(kHalf,iter.common_dtype(), "digamma_cuda", [&]() {
-      jitted_gpu_kernel</*name=*/digamma_name,
-                        /*return_dtype=*/ scalar_t,
-                        /*common_dtype=*/ scalar_t,
-                        /*arity=*/ 1>(iter, digamma_string);
-    });
+    // FIXME does not support universal types
+    // if (isUniversalType(iter.common_dtype())) {
+    //   AT_DISPATCH_UNIVERSAL_TYPES(iter.common_dtype(), "digamma_cuda", [&]() {
+    //     gpu_kernel(iter, []GPU_LAMBDA(scalar_t a) -> scalar_t {
+    //       return calc_digamma(a);
+    //     });
+    //   });
+    // } else {
+      AT_DISPATCH_FLOATING_TYPES_AND(kHalf,iter.common_dtype(), "digamma_cuda", [&]() {
+        jitted_gpu_kernel</*name=*/digamma_name,
+                          /*return_dtype=*/ scalar_t,
+                          /*common_dtype=*/ scalar_t,
+                          /*arity=*/ 1>(iter, digamma_string);
+      });
+    // }
   #else
-    AT_DISPATCH_FLOATING_TYPES_AND_UNIVERSAL_AND(kHalf,iter.common_dtype(), "digamma_cuda", [&]() {
+    AT_DISPATCH_FLOATING_TYPES_AND(kHalf,iter.common_dtype(), "digamma_cuda", [&]() {
       gpu_kernel(iter, []GPU_LAMBDA(scalar_t a) -> scalar_t {
         return calc_digamma(a);
       });
@@ -34,12 +43,21 @@ void digamma_kernel_cuda(TensorIteratorBase& iter) {
 const char trigamma_name[] = "trigamma";
 void trigamma_kernel_cuda(TensorIteratorBase& iter) {
   #ifdef USE_JITERATOR
-    AT_DISPATCH_FLOATING_TYPES_AND_UNIVERSAL_AND(kHalf,iter.common_dtype(), "trigamma_cuda", [&]() {
-      jitted_gpu_kernel</*name=*/trigamma_name,
-                        /*return_dtype=*/ scalar_t,
-                        /*common_dtype=*/ scalar_t,
-                        /*arity=*/ 1>(iter, trigamma_string);
-    });
+    // Does not support universal types
+    // if (isUniversalType(iter.common_dtype())) {
+    //   AT_DISPATCH_UNIVERSAL_TYPES(iter.common_dtype(), "trigamma_cuda", [&]() {
+    //     gpu_kernel(iter, []GPU_LAMBDA(scalar_t a) -> scalar_t {
+    //       return calc_trigamma(a);
+    //     });
+    //   });
+    // } else {
+      AT_DISPATCH_FLOATING_TYPES_AND(kHalf,iter.common_dtype(), "trigamma_cuda", [&]() {
+        jitted_gpu_kernel</*name=*/trigamma_name,
+                          /*return_dtype=*/ scalar_t,
+                          /*common_dtype=*/ scalar_t,
+                          /*arity=*/ 1>(iter, trigamma_string);
+      });
+    // }
   #else
     AT_DISPATCH_FLOATING_TYPES_AND_UNIVERSAL_AND(kHalf,iter.common_dtype(), "trigamma_cuda", [&]() {
       gpu_kernel(iter, []GPU_LAMBDA(scalar_t a) -> scalar_t {
@@ -58,19 +76,28 @@ void polygamma_kernel_cuda(TensorIteratorBase& iter, int64_t n) {
   } else {
 #ifdef USE_JITERATOR
     // TODO : `unary_jitted_gpu_kernel` for cleaner UX.
-    AT_DISPATCH_FLOATING_TYPES_AND_UNIVERSAL_AND(kHalf,
-        iter.common_dtype(), "polygamma_cuda", [&]() {
-          jitted_gpu_kernel<
-              /*name=*/polygamma_name,
-              /*return_dtype=*/scalar_t,
-              /*common_dtype=*/scalar_t,
-              /*arity=*/1>(
-              iter,
-              polygamma_string,
-              /*scalar_pos=*/at::cuda::jit::BinaryFuncVariant::NoScalar,
-              /*scalar_val=*/0,
-              /*extra_args=*/std::make_tuple(n));
-        });
+    if (isUniversalType(iter.common_dtype())) {
+      AT_DISPATCH_UNIVERSAL_TYPES(
+          iter.common_dtype(), "polygamma_cuda", [&]() {
+            gpu_kernel(iter, [=] GPU_LAMBDA(scalar_t a) -> scalar_t {
+              return calc_polygamma<scalar_t, /*is_cuda=*/true>(a, static_cast<int>(n));
+            });
+          });
+    } else {
+      AT_DISPATCH_FLOATING_TYPES_AND(kHalf,
+          iter.common_dtype(), "polygamma_cuda", [&]() {
+            jitted_gpu_kernel<
+                /*name=*/polygamma_name,
+                /*return_dtype=*/scalar_t,
+                /*common_dtype=*/scalar_t,
+                /*arity=*/1>(
+                iter,
+                polygamma_string,
+                /*scalar_pos=*/at::cuda::jit::BinaryFuncVariant::NoScalar,
+                /*scalar_val=*/0,
+                /*extra_args=*/std::make_tuple(n));
+          });
+    }
 #else
     AT_DISPATCH_FLOATING_TYPES_AND_UNIVERSAL_AND(kHalf,
         iter.common_dtype(), "polygamma_cuda", [&]() {
@@ -85,12 +112,20 @@ void polygamma_kernel_cuda(TensorIteratorBase& iter, int64_t n) {
 const char lgamma_name[] = "lgamma_kernel";
 void lgamma_kernel_cuda(TensorIteratorBase& iter) {
   #ifdef USE_JITERATOR
-    AT_DISPATCH_FLOATING_TYPES_AND_UNIVERSAL_AND(kHalf,iter.common_dtype(), "lgamma_cuda", [&]() {
-      jitted_gpu_kernel</*name=*/lgamma_name,
-                        /*return_dtype=*/ scalar_t,
-                        /*common_dtype=*/ scalar_t,
-                        /*arity=*/ 1>(iter, lgamma_string);
-    });
+    if (isUniversalType(iter.common_dtype())) {
+      AT_DISPATCH_UNIVERSAL_TYPES(iter.common_dtype(), "lgamma_cuda", [&]() {
+        gpu_kernel(iter, []GPU_LAMBDA(scalar_t a) -> scalar_t {
+          return ::lgamma(a);
+        });
+      });
+    } else {
+      AT_DISPATCH_FLOATING_TYPES_AND(kHalf,iter.common_dtype(), "lgamma_cuda", [&]() {
+        jitted_gpu_kernel</*name=*/lgamma_name,
+                          /*return_dtype=*/ scalar_t,
+                          /*common_dtype=*/ scalar_t,
+                          /*arity=*/ 1>(iter, lgamma_string);
+      });
+    }
   #else
     AT_DISPATCH_FLOATING_TYPES_AND_UNIVERSAL_AND(kHalf,iter.common_dtype(), "lgamma_cuda", [&]() {
       gpu_kernel(iter, []GPU_LAMBDA(scalar_t a) -> scalar_t {

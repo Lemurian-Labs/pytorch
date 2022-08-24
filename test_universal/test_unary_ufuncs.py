@@ -24,6 +24,7 @@ from torch.testing._internal.common_dtype import (
     get_all_complex_dtypes, get_all_fp_dtypes,
     native_equivalent, universal_types, universal_types_double_precision
 )
+from torch.testing._comparison import get_tolerances
 
 if TEST_SCIPY:
     import scipy
@@ -308,8 +309,9 @@ class TestUnaryUfuncs(TestCase):
                                        exact_dtype=exact_dtype, rtol=16e-3, atol=1e-5)
             elif dtype in universal_types():
                 # Ref: https://github.com/pytorch/pytorch/blob/master/torch/testing/_internal/common_utils.py#L1149
+                rtol, atol = get_tolerances(dtype, rtol=None, atol=None, id=self.id)
                 self.assertEqualHelper(actual, expected, msg, dtype=dtype,
-                                       exact_dtype=exact_dtype, rtol=1e-3, atol=1e-5)
+                                       exact_dtype=exact_dtype, rtol=rtol, atol=atol)
             else:
                 self.assertEqualHelper(actual, expected, msg, dtype=dtype, equal_nan=equal_nan, exact_dtype=exact_dtype)
 

@@ -95,6 +95,7 @@ template <> inline std::string typeName<at::BFloat16>(){
 }
 #define TYPE_NAME_FN(ctype, name) \
 template <> inline std::string typeName<ctype>(){ \
+    TORCH_INTERNAL_ASSERT(false, "Universal types are not supported"); \
     return std::string(#ctype);    \
 }
 

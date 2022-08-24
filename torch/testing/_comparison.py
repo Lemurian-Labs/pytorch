@@ -48,7 +48,7 @@ _DTYPE_PRECISIONS = {
     torch.complex64: (1.3e-6, 1e-5),
     torch.complex128: (1e-7, 1e-7),
     torch.cfloatwithsubnormals: (1.3e-6, 1e-5),
-    torch.lns16: (0.016, 1e-2),
+    torch.lns16: (0.016, 1e+15),  # lns16 can store large numbers, but very few digits, that's why atol is so high
 }
 # The default tolerances of torch.float32 are used for quantized dtypes, because quantized tensors are compared in
 # their dequantized and floating point representation. For more details see `TensorLikePair._compare_quantized_values`
