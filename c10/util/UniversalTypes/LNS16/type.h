@@ -226,7 +226,10 @@ public:
   // ATen requires unary minus to be constexpr
   constexpr CUDA_NOINLINE C10_HOST_DEVICE LNS16 operator-() const
   {
-    return Base::operator-();
+    if (iszero())
+      return *this;
+    else
+      return Base::operator-();
   }
   CUDA_NOINLINE C10_HOST_DEVICE LNS16& operator+=(const LNS16& right)
   {

@@ -39,30 +39,10 @@ class SimpleNet(nn.Module):
 
 
 def main():
-    # Make the result reproducible
-    random_seed = 42
-    torch.manual_seed(random_seed)
-    random.seed(random_seed)
-    np.random.seed(0)
-    torch.use_deterministic_algorithms(True)
-
-    # Random number generators for DataLoader
-    def new_generator():
-        g = torch.Generator()
-        g.manual_seed(random_seed)
-        return g
-
-    # Seed the parallel workers in DataLoader
-    def seed_worker(worker_id):
-        worker_seed = random_seed + worker_id
-        torch.manual_seed(worker_seed)
-        np.random.seed(worker_seed)
-        random.seed(worker_seed)
-
     parser = argparse.ArgumentParser(
         description=(
-            'Trains and/or tests a model with dtype=torch.cfloatwithsubnormals '
-            'and dtype=torch.float32, writes the models and the results into '
+            'Trains and/or tests a model with the specified dtype and with '
+            'dtype=torch.float32, writes the models and the results into '
             'the test_data/test_train_with_universal_types/ folder. '
             'This script requires torchvision. Install torchvision first, and '
             'then reinstall the modified pytorch (python setup.py install).'
@@ -84,6 +64,18 @@ def main():
     parser.add_argument(
         '--batch-size', dest='batch_size', default=6, type=int,
         help='batch size'
+    )
+    parser.add_argument(
+        '--dtype', type=str, default='lns16', choices=['lns16', 'cfloatwithsubnormals'],
+        help='the data type'
+    )
+    parser.add_argument(
+        '--device', type=str, default='cpu', choices=['cpu', 'cuda'],
+        help='the device'
+    )
+    parser.add_argument(
+        '--random', action='store_false',
+        help='randomize the training (always true for cuda)'
     )
 
     args = parser.parse_args()
@@ -114,7 +106,42 @@ def main():
     # Output logs to file and to stderr
     logging.getLogger().addHandler(logging.StreamHandler())
 
-    dtypes = (torch.cfloatwithsubnormals, torch.float32)
+    if args.dtype == 'cfloatwithsubnormals':
+        dtypes = (torch.cfloatwithsubnormals, torch.float32)
+    else:
+        dtypes = (torch.lns16, torch.float32)
+
+    if args.device == 'cuda':
+        device = torch.device('cuda')
+    else:
+        device = torch.device('cpu')
+
+    if not args.random and args.device != 'cuda':
+        # Make the result reproducible
+        random_seed = 42
+        torch.manual_seed(random_seed)
+        random.seed(random_seed)
+        np.random.seed(0)
+        torch.use_deterministic_algorithms(True)
+
+        # Random number generators for DataLoader
+        def new_generator():
+            g = torch.Generator()
+            g.manual_seed(random_seed)
+            return g
+
+        # Seed the parallel workers in DataLoader
+        def seed_worker(worker_id):
+            worker_seed = random_seed + worker_id
+            torch.manual_seed(worker_seed)
+            np.random.seed(worker_seed)
+            random.seed(worker_seed)
+    else:
+        def new_generator():
+            return torch.Generator()
+
+        def seed_worker(worker_id):
+            pass
 
     for dtype in dtypes:
         model_file_name = f'test_data/test_train_with_universal_types/{model_name}_small_{dtype}.pth'
@@ -169,7 +196,7 @@ def main():
 
         if not test_only:
             # Create mobilenetv3
-            net = model(num_classes=10).to(dtype).train()
+            net = model(num_classes=10).to(dtype=dtype, device=device).train()
             criterion = torch.nn.CrossEntropyLoss()
             optimizer = torch.optim.SGD(
                 net.parameters(),
@@ -184,6 +211,8 @@ def main():
                 running_loss = 0.0
                 for i, data in enumerate(trainloader, 0):
                     inputs, labels = data
+                    inputs = inputs.to(device)
+                    labels = labels.to(device)
                     optimizer.zero_grad()
                     outputs = net(inputs)
                     loss = criterion(outputs, labels)
@@ -205,7 +234,7 @@ def main():
         if not os.path.isfile(model_file_name):
             logging.error(f'{model_file_name} does not exist')
             return
-        net = model(num_classes=10).to(dtype)
+        net = model(num_classes=10).to(dtype=dtype, device=device)
         net.load_state_dict(torch.load(model_file_name))
         net = net.eval()
 
@@ -225,6 +254,8 @@ def main():
             with torch.no_grad():
                 for data in testloader:
                     images, labels = data
+                    images = images.to(device)
+                    labels = labels.to(device)
                     outputs = net(images)
                     _, predicted = torch.max(outputs.data, 1)
                     for prediction, label in zip(predicted, labels):
