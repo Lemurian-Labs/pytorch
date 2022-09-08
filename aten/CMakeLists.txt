@@ -42,7 +42,11 @@ set(ATEN_INSTALL_LIB_SUBDIR "lib" CACHE PATH "ATen install library subdirectory"
 set(ATEN_INSTALL_INCLUDE_SUBDIR "include" CACHE PATH "ATen install include subdirectory")
 
 if(USE_CUDA)
-  list(APPEND ATen_CUDA_INCLUDE ${CUDA_INCLUDE_DIRS})
+  list(APPEND ATen_CUDA_INCLUDE
+    ${CUDA_INCLUDE_DIRS}
+    ${CMAKE_CURRENT_SOURCE_DIR}/../third_party/cutlass/include)
+    # We don't need utils at the moment
+    #${CMAKE_CURRENT_SOURCE_DIR}/../third_party/cutlass/tools/util/include)
 endif()
 
 set(TH_LINK_STYLE STATIC)

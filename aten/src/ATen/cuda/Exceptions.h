@@ -53,6 +53,15 @@ C10_EXPORT const char* _cublasGetErrorEnum(cublasStatus_t error);
                 " when calling `" #EXPR "`");                   \
   } while (0)
 
+#define TORCH_CUTLASS_CHECK(EXPR)                       \
+  do {                                                  \
+    cutlass::Status __err = EXPR;                       \
+    TORCH_CHECK(__err == cutlass::Status::kSuccess,     \
+                "CUDA error: ",                         \
+                cutlass::cutlassGetStatusString(__err), \
+                " when calling `" #EXPR "`");           \
+  } while (0)
+
 const char *cusparseGetErrorString(cusparseStatus_t status);
 
 #define TORCH_CUDASPARSE_CHECK(EXPR)                            \

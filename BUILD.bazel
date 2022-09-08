@@ -413,6 +413,7 @@ cc_library(
         ":torch_headers",
         "@fbgemm",
         "@ideep",
+        "@cutlass",
     ],
     alwayslink = True,
 )

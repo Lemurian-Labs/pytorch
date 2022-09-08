@@ -105,6 +105,12 @@ new_local_repository(
 )
 
 new_local_repository(
+    name = "cutlass",
+    build_file = "//third_party:cutlass.BUILD",
+    path = "third_party/cutlass",
+)
+
+new_local_repository(
     name = "mkl_dnn",
     build_file = "//third_party:mkl-dnn.BUILD",
     path = "third_party/ideep/mkl-dnn",

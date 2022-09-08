@@ -70,6 +70,12 @@ template <>
 void gemm<at::BFloat16>(CUDABLAS_GEMM_ARGTYPES(at::BFloat16));
 #endif
 
+#define OP(T, _)                            \
+  template <>                               \
+  void gemm<T>(CUDABLAS_GEMM_ARGTYPES(T));
+AT_FORALL_UNIVERSAL_TYPES(OP)
+#undef OP
+
 #define CUDABLAS_BGEMM_ARGTYPES(Dtype)                                                        \
   char transa, char transb, int64_t m, int64_t n, int64_t k, at::opmath_type<Dtype> alpha,    \
       const Dtype *a, int64_t lda, int64_t stridea,                                           \

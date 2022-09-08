@@ -3,6 +3,7 @@
  */
 
 #include <ATen/cuda/CUDABlas.h>
+#include <ATen/cuda/CUDABlas.cuh>
 #include <ATen/cuda/Exceptions.h>
 #include <c10/util/irange.h>
 #include <c10/macros/Export.h>
@@ -575,6 +576,19 @@ void gemm<at::BFloat16>(CUDABLAS_GEMM_ARGTYPES(at::BFloat16)) {
       CUBLAS_GEMM_DFALT_TENSOR_OP));
 }
 #endif // defined(CUDA_VERSION) && CUDA_VERSION >= 11000
+
+#define OP(T, _)                                                         \
+  template <>                                                            \
+  void gemm<T>(CUDABLAS_GEMM_ARGTYPES(T)) {                              \
+    globalContext().alertCuBLASConfigNotDeterministic();                 \
+    cublasOperation_t opa = _cublasOpFromChar(transa);                   \
+    cublasOperation_t opb = _cublasOpFromChar(transb);                   \
+    _cublasAdjustLdLevel3(transa, transb, m, n, k, &lda, &ldb, &ldc);    \
+    GEMM_CHECK_ARGVALUES(T);                                             \
+    cutlassGemm(opa, opb, m, n, k, alpha, a, lda, b, ldb, beta, c, ldc); \
+  }
+AT_FORALL_UNIVERSAL_TYPES(OP)
+#undef OP
 
 template <>
 void trsm<float>(CUDABLAS_TRSM_ARGTYPES(float)) {
