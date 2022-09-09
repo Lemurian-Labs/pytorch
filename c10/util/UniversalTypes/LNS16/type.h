@@ -26,7 +26,7 @@
 // (argument type, return type, left operand type, right operand type)
 #define FORALL_SUPPORTED_TYPES_IN_OPERATORS(_) \
   _(int, LNS16, LNS16::Base, LNS16::Base)      \
-  _(float, float, float, float)                \
+  _(float, LNS16, LNS16::Base, LNS16::Base)    \
   _(double, double, double, double)
 
 // Private macro (it is removed with #undef below)
@@ -79,33 +79,33 @@ public:
       static_cast<Base>(*this),
       static_cast<Base>(right));
   }
-  #define OP(T)                                    \
+  #define OP(T)                                                  \
     CUDA_NOINLINE C10_HOST_DEVICE bool operator<(T right) const  \
-    {                                              \
-      return sw::universal::operator<(             \
-        static_cast<Base>(*this),                  \
-        static_cast<Base>(right));                 \
-    }                                              \
+    {                                                            \
+      return sw::universal::operator<(                           \
+        static_cast<Base>(*this),                                \
+        static_cast<Base>(right));                               \
+    }                                                            \
     CUDA_NOINLINE C10_HOST_DEVICE bool operator<=(T right) const \
-    {                                              \
-      return sw::universal::operator<=(            \
-        static_cast<Base>(*this),                  \
-        static_cast<Base>(right));                 \
+    {                                                            \
+      return sw::universal::operator<=(                          \
+        static_cast<Base>(*this),                                \
+        static_cast<Base>(right));                               \
     }
   FORALL_SUPPORTED_TYPES(OP)
   #undef OP
-  #define OP(T)                                        \
-    CUDA_NOINLINE C10_HOST_DEVICE bool operator<(T right) const      \
-    {                                                  \
-      return sw::universal::operator<(                 \
-        static_cast<Base>(*this),                      \
-        static_cast<Base>(static_cast<LNS16>(right))); \
-    }                                                  \
-    CUDA_NOINLINE C10_HOST_DEVICE bool operator<=(T right) const     \
-    {                                                  \
-      return sw::universal::operator<=(                \
-        static_cast<Base>(*this),                      \
-        static_cast<Base>(static_cast<LNS16>(right))); \
+  #define OP(T)                                                  \
+    CUDA_NOINLINE C10_HOST_DEVICE bool operator<(T right) const  \
+    {                                                            \
+      return sw::universal::operator<(                           \
+        static_cast<Base>(*this),                                \
+        static_cast<Base>(static_cast<LNS16>(right)));           \
+    }                                                            \
+    CUDA_NOINLINE C10_HOST_DEVICE bool operator<=(T right) const \
+    {                                                            \
+      return sw::universal::operator<=(                          \
+        static_cast<Base>(*this),                                \
+        static_cast<Base>(static_cast<LNS16>(right)));           \
     }
   FORALL_ADDITIONAL_TYPES(OP)
   #undef OP
@@ -123,33 +123,33 @@ public:
       static_cast<Base>(*this),
       static_cast<Base>(right));
   }
-  #define OP(T)                                    \
+  #define OP(T)                                                  \
     CUDA_NOINLINE C10_HOST_DEVICE bool operator>(T right) const  \
-    {                                              \
-      return sw::universal::operator>(             \
-        static_cast<Base>(*this),                  \
-        static_cast<Base>(right));                 \
-    }                                              \
+    {                                                            \
+      return sw::universal::operator>(                           \
+        static_cast<Base>(*this),                                \
+        static_cast<Base>(right));                               \
+    }                                                            \
     CUDA_NOINLINE C10_HOST_DEVICE bool operator>=(T right) const \
-    {                                              \
-      return sw::universal::operator>=(            \
-        static_cast<Base>(*this),                  \
-        static_cast<Base>(right));                 \
+    {                                                            \
+      return sw::universal::operator>=(                          \
+        static_cast<Base>(*this),                                \
+        static_cast<Base>(right));                               \
     }
   FORALL_SUPPORTED_TYPES(OP)
   #undef OP
-  #define OP(T)                                        \
-    CUDA_NOINLINE C10_HOST_DEVICE bool operator>(T right) const      \
-    {                                                  \
-      return sw::universal::operator>(                 \
-        static_cast<Base>(*this),                      \
-        static_cast<Base>(static_cast<LNS16>(right))); \
-    }                                                  \
-    CUDA_NOINLINE C10_HOST_DEVICE bool operator>=(T right) const     \
-    {                                                  \
-      return sw::universal::operator>=(                \
-        static_cast<Base>(*this),                      \
-        static_cast<Base>(static_cast<LNS16>(right))); \
+  #define OP(T)                                                  \
+    CUDA_NOINLINE C10_HOST_DEVICE bool operator>(T right) const  \
+    {                                                            \
+      return sw::universal::operator>(                           \
+        static_cast<Base>(*this),                                \
+        static_cast<Base>(static_cast<LNS16>(right)));           \
+    }                                                            \
+    CUDA_NOINLINE C10_HOST_DEVICE bool operator>=(T right) const \
+    {                                                            \
+      return sw::universal::operator>=(                          \
+        static_cast<Base>(*this),                                \
+        static_cast<Base>(static_cast<LNS16>(right)));           \
     }
   FORALL_ADDITIONAL_TYPES(OP)
   #undef OP
@@ -166,28 +166,28 @@ public:
       static_cast<Base>(*this),
       static_cast<Base>(right));
   }
-  #define OP(T)                                    \
+  #define OP(T)                                                  \
     CUDA_NOINLINE C10_HOST_DEVICE bool operator==(T right) const \
-    {                                              \
-      return sw::universal::operator==(            \
-        static_cast<Base>(*this),                  \
-        static_cast<Base>(right));                 \
-    }                                              \
+    {                                                            \
+      return sw::universal::operator==(                          \
+        static_cast<Base>(*this),                                \
+        static_cast<Base>(right));                               \
+    }                                                            \
     CUDA_NOINLINE C10_HOST_DEVICE bool operator!=(T right) const \
-    {                                              \
-      return sw::universal::operator!=(            \
-        static_cast<Base>(*this),                  \
-        static_cast<Base>(right));                 \
+    {                                                            \
+      return sw::universal::operator!=(                          \
+        static_cast<Base>(*this),                                \
+        static_cast<Base>(right));                               \
     }
   FORALL_SUPPORTED_TYPES(OP)
   #undef OP
 
   // Assignment operators
-  #define OP(T)                               \
+  #define OP(T)                                             \
     CUDA_NOINLINE C10_HOST_DEVICE LNS16& operator=(T value) \
-    {                                         \
-      Base::operator=(value);                 \
-      return *this;                           \
+    {                                                       \
+      Base::operator=(value);                               \
+      return *this;                                         \
     }
   FORALL_SUPPORTED_TYPES(OP)
   #undef OP
@@ -345,15 +345,15 @@ inline C10_HOST_DEVICE LNS16 operator/(const LNS16& left, const LNS16& right)
   }                                                                             \
   inline C10_HOST_DEVICE R operator-(const LNS16& left, T right)                \
   {                                                                             \
-    return static_cast<R>(static_cast<Left>(left) + static_cast<Right>(right)); \
+    return static_cast<R>(static_cast<Left>(left) - static_cast<Right>(right)); \
   }                                                                             \
   inline C10_HOST_DEVICE R operator*(const LNS16& left, T right)                \
   {                                                                             \
-    return static_cast<R>(static_cast<Left>(left) + static_cast<Right>(right)); \
+    return static_cast<R>(static_cast<Left>(left) * static_cast<Right>(right)); \
   }                                                                             \
   inline C10_HOST_DEVICE R operator/(const LNS16& left, T right)                \
   {                                                                             \
-    return static_cast<R>(static_cast<Left>(left) + static_cast<Right>(right)); \
+    return static_cast<R>(static_cast<Left>(left) / static_cast<Right>(right)); \
   }                                                                             \
   inline C10_HOST_DEVICE R operator+(T left, const LNS16& right)                \
   {                                                                             \
@@ -361,15 +361,15 @@ inline C10_HOST_DEVICE LNS16 operator/(const LNS16& left, const LNS16& right)
   }                                                                             \
   inline C10_HOST_DEVICE R operator-(T left, const LNS16& right)                \
   {                                                                             \
-    return static_cast<R>(static_cast<Left>(left) + static_cast<Right>(right)); \
+    return static_cast<R>(static_cast<Left>(left) - static_cast<Right>(right)); \
   }                                                                             \
   inline C10_HOST_DEVICE R operator*(T left, const LNS16& right)                \
   {                                                                             \
-    return static_cast<R>(static_cast<Left>(left) + static_cast<Right>(right)); \
+    return static_cast<R>(static_cast<Left>(left) * static_cast<Right>(right)); \
   }                                                                             \
   inline C10_HOST_DEVICE R operator/(T left, const LNS16& right)                \
   {                                                                             \
-    return static_cast<R>(static_cast<Left>(left) + static_cast<Right>(right)); \
+    return static_cast<R>(static_cast<Left>(left) / static_cast<Right>(right)); \
   }
 FORALL_SUPPORTED_TYPES_IN_OPERATORS(OP)
 #undef OP

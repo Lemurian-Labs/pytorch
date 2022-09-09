@@ -577,7 +577,7 @@ void gemm<at::BFloat16>(CUDABLAS_GEMM_ARGTYPES(at::BFloat16)) {
 }
 #endif // defined(CUDA_VERSION) && CUDA_VERSION >= 11000
 
-#define OP(T, _)                                                         \
+#define OP(T, NAME)                                                      \
   template <>                                                            \
   void gemm<T>(CUDABLAS_GEMM_ARGTYPES(T)) {                              \
     globalContext().alertCuBLASConfigNotDeterministic();                 \

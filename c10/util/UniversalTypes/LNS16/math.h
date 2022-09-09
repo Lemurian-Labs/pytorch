@@ -105,13 +105,22 @@ inline c10::LNS16 fabs(c10::LNS16 a) {
 CUDA_NOINLINE C10_HOST_DEVICE inline c10::LNS16 nextafter(
     c10::LNS16 from,
     c10::LNS16 to) {
+  #ifdef __CUDA_ARCH__
+  return nextafterf(static_cast<float>(from), static_cast<float>(to));
+  #else
   return std::nextafter(static_cast<float>(from), static_cast<float>(to));
+  #endif
 }
 
 CUDA_NOINLINE C10_HOST_DEVICE inline c10::LNS16 nexttoward(
     c10::LNS16 from,
     long double to) {
+  #ifdef __CUDA_ARCH__
+  // CUDA does not have nexttowardf
+  return nextafterf(static_cast<float>(from), static_cast<float>(to));
+  #else
   return std::nexttoward(static_cast<float>(from), to);
+  #endif
 }
 
 } // namespace std
