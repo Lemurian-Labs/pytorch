@@ -2,6 +2,7 @@
 #include <ATen/cuda/CUDABlas.cuh>
 #include <cutlass/gemm/device/gemm.h>
 #include <c10/util/UniversalTypes.h>
+#include <c10/util/UniversalTypes/cutlass_array_specializations.cuh>
 
 namespace at {
 namespace cuda {
