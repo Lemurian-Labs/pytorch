@@ -16,7 +16,7 @@ void _cutlassGemm(CUTLASS_GEMM_ARGTYPES(T)) {
     T,
     LayoutB,
     T,
-    cutlass::layout::RowMajor,
+    cutlass::layout::ColumnMajor,
     T
   >;
   Gemm gemm_op;
@@ -36,16 +36,16 @@ void _cutlassGemm(CUTLASS_GEMM_ARGTYPES(T)) {
 #define OP(T, _)                                                                    \
   void cutlassGemm(CUTLASS_GEMM_ARGTYPES(T)) {                                      \
     if (opa == CUBLAS_OP_N && opb == CUBLAS_OP_N)                                   \
-      _cutlassGemm<T, cutlass::layout::RowMajor, cutlass::layout::RowMajor>(        \
+      _cutlassGemm<T, cutlass::layout::ColumnMajor, cutlass::layout::ColumnMajor>(  \
         opa, opb, m, n, k, alpha, a, lda, b, ldb, beta, c, ldc);                    \
     else if (opa == CUBLAS_OP_N)                                                    \
-      _cutlassGemm<T, cutlass::layout::RowMajor, cutlass::layout::ColumnMajor>(     \
-        opa, opb, m, n, k, alpha, a, lda, b, ldb, beta, c, ldc);                    \
-    else if (opb == CUBLAS_OP_N)                                                    \
       _cutlassGemm<T, cutlass::layout::ColumnMajor, cutlass::layout::RowMajor>(     \
         opa, opb, m, n, k, alpha, a, lda, b, ldb, beta, c, ldc);                    \
+    else if (opb == CUBLAS_OP_N)                                                    \
+      _cutlassGemm<T, cutlass::layout::RowMajor, cutlass::layout::ColumnMajor>(     \
+        opa, opb, m, n, k, alpha, a, lda, b, ldb, beta, c, ldc);                    \
     else                                                                            \
-      _cutlassGemm<T, cutlass::layout::ColumnMajor, cutlass::layout::ColumnMajor>(  \
+      _cutlassGemm<T, cutlass::layout::RowMajor, cutlass::layout::RowMajor>(        \
         opa, opb, m, n, k, alpha, a, lda, b, ldb, beta, c, ldc);                    \
   }
 AT_FORALL_UNIVERSAL_TYPES(OP)

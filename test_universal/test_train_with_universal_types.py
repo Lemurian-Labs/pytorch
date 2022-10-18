@@ -195,7 +195,7 @@ def main():
         )
 
         if not test_only:
-            # Create mobilenetv3
+            # Create the model
             net = model(num_classes=10).to(dtype=dtype, device=device).train()
             criterion = torch.nn.CrossEntropyLoss()
             optimizer = torch.optim.SGD(
